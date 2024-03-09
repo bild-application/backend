@@ -23,7 +23,7 @@ security:
                 check_path: api_login
                 
             logout:
-                path: /logout
+                path: /api/logout
 
             # https://symfony.com/doc/current/security/impersonating_user.html
             # switch_user: true
