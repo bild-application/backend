@@ -20,3 +20,5 @@
 /phpunit.xml
 .phpunit.result.cache
 ###< phpunit/phpunit ###
+
+.DS_Store
