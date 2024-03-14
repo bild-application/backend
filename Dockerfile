@@ -66,6 +66,10 @@ COPY --link frankenphp/conf.d/app.dev.ini $PHP_INI_DIR/conf.d/
 
 CMD [ "frankenphp", "run", "--config", "/etc/caddy/Caddyfile", "--watch" ]
 
+RUN echo "alias ll='ls -lha'" >> ~/.bashrc
+RUN echo "alias c=clear" >> ~/.bashrc
+RUN echo "alias p='php bin/console'" >> ~/.bashrc
+
 # Prod FrankenPHP image
 FROM frankenphp_base AS frankenphp_prod
 
