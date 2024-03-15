@@ -28,6 +28,10 @@ class RegisterFormType extends AbstractType
                         'message' => ErrorEnum::INVALID_EMAIL->value,
                     ]),
                 ],
+                'documentation' => [
+                    'type' => 'string',
+                    'description' => 'Email',
+                ],
             ])
             ->add('agreeTerms', CheckboxType::class, [
                 'mapped' => false,
