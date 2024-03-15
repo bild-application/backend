@@ -1,0 +1,22 @@
+### To use aliases, run `source .aliases`
+
+# Docker Compose
+    alias dc='docker compose'
+
+# Docker Up
+    alias du='docker compose up -d --wait'
+
+# Docker Build
+    alias db='docker compose up -d --build'
+
+# Docker Build no Cache
+    alias dbc='docker compose build --no-cache'
+
+# Docker Exec
+    alias de='docker exec -ti backend-php-1 bash'
+
+# Php Console
+    docker_php_console() {
+        docker compose exec php bash -c "php bin/console $@"
+    }
+    alias pc='docker_php_console'
