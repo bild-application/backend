@@ -3,7 +3,8 @@
 namespace App\Controller;
 
 use App\Entity\User;
-use App\Manager\AuthManager;
+use App\Manager\Auth\RegistrationManager;
+use App\Manager\Auth\SessionManager;
 use FOS\RestBundle\Controller\AbstractFOSRestController;
 use FOS\RestBundle\Controller\Annotations as Rest;
 use FOS\RestBundle\View\View;
@@ -15,7 +16,8 @@ use Symfony\Component\Security\Http\Attribute\CurrentUser;
 class AuthController extends AbstractFOSRestController
 {
     public function __construct(
-        private readonly AuthManager $authManager
+        private readonly RegistrationManager $registrationManager,
+        private readonly SessionManager $sessionManager
     ) {
     }
 
@@ -23,22 +25,16 @@ class AuthController extends AbstractFOSRestController
     public function register(Request $request): View
     {
         return $this->view(
-            $this->authManager->register($request->toArray())
+            $this->registrationManager->attemptRegister($request->toArray())
         );
     }
 
-    #[Route('/api/auth/login', name: 'api_auth_login')]
-    public function login(#[CurrentUser] ?User $user): Response
+    #[Rest\Post('/api/auth/login', name: 'api_auth_login')]
+    public function login(#[CurrentUser] ?User $user, Request $request): View
     {
-        if ($user === null) {
-            return new Response(json_encode([
-                'message' => 'missing credentials',
-            ], JSON_THROW_ON_ERROR), Response::HTTP_BAD_REQUEST);
-        }
-
-        return new Response(json_encode([
-            'user' => $user->getUserIdentifier(),
-        ], JSON_THROW_ON_ERROR), Response::HTTP_OK);
+        return $this->view(
+            $this->sessionManager->attemptLogin($request->toArray())
+        );
     }
 
     #[Route('/api/auth/check', name: 'api_auth_check')]

@@ -49,6 +49,9 @@ abstract class AbstractTest extends WebTestCase
             'debug' => true,
         ]);
 
+        // Useful to not display all 29049 lines of html when a request fail
+        $this->client->catchExceptions(false);
+
         $manager = self::getContainer()->get('doctrine.orm.entity_manager');
 
         if ($manager instanceof EntityManagerInterface) {

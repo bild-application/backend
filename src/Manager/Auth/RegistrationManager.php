@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Manager;
+namespace App\Manager\Auth;
 
 use App\Entity\User;
 use App\Form\RegisterFormType;
@@ -10,7 +10,7 @@ use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
-class AuthManager
+class RegistrationManager
 {
     public function __construct(
         private readonly FormFactoryInterface $formFactory,
@@ -20,7 +20,7 @@ class AuthManager
     ) {
     }
 
-    public function register(array $data): FormInterface
+    public function attemptRegister(array $data): FormInterface
     {
         $user = new User();
 
@@ -33,16 +33,14 @@ class AuthManager
             $user->setPassword(
                 $this->userPasswordHasher->hashPassword(
                     $user,
-                    $form->get('password')->getData()
+                    $data['password']['first']
                 )
             );
 
             $this->entityManager->persist($user);
             $this->entityManager->flush();
 
-            // do anything else you need here, like send an email
-
-            //            return $this->security->login($user, 'json_login', 'main');
+            $this->security->login($user, 'json_login', 'main');
         }
 
         return $form;
