@@ -13,7 +13,7 @@
     alias dbc='docker compose build --no-cache'
 
 # Docker Exec
-    alias de='docker exec -ti backend-php-1 bash'
+    alias de='docker exec -ti backend-php-1'
 
 # Php Console
     docker_php_console() {
