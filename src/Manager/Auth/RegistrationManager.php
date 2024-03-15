@@ -20,7 +20,7 @@ class RegistrationManager
     ) {
     }
 
-    public function attemptRegister(array $data): FormInterface
+    public function attemptRegister(array $data): FormInterface|User
     {
         $user = new User();
 
@@ -28,21 +28,23 @@ class RegistrationManager
             ->create(RegisterFormType::class, $user)
             ->submit($data);
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            // encode the plain password
-            $user->setPassword(
-                $this->userPasswordHasher->hashPassword(
-                    $user,
-                    $data['password']['first']
-                )
-            );
-
-            $this->entityManager->persist($user);
-            $this->entityManager->flush();
-
-            $this->security->login($user, 'json_login', 'main');
+        if (!$form->isValid()) {
+            return $form;
         }
 
-        return $form;
+        // encode the plain password
+        $user->setPassword(
+            $this->userPasswordHasher->hashPassword(
+                $user,
+                $data['password']['first']
+            )
+        );
+
+        $this->entityManager->persist($user);
+        $this->entityManager->flush();
+
+        $this->security->login($user, 'json_login', 'main');
+
+        return $user;
     }
 }
