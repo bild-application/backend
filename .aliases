@@ -20,3 +20,6 @@
         docker compose exec php bash -c "php bin/console $@"
     }
     alias pc='docker_php_console'
+
+# Clear
+    alias c=clear
