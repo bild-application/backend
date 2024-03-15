@@ -25,7 +25,7 @@ class RegisterFormType extends AbstractType
                 'constraints' => [
                     new Email([
                         'mode' => Email::VALIDATION_MODE_HTML5,
-                        'message' => "L'email est invalide",
+                        'message' => ErrorEnum::INVALID_EMAIL->value,
                     ]),
                 ],
             ])
@@ -33,14 +33,14 @@ class RegisterFormType extends AbstractType
                 'mapped' => false,
                 'constraints' => [
                     new IsTrue([
-                        'message' => 'Vous devez accepter les termes',
+                        'message' => ErrorEnum::NEED_AGREE_TERMS->value,
                     ]),
                 ],
             ])
             ->add('password', RepeatedType::class, [
                 'mapped' => false,
                 'type' => PasswordType::class,
-                'invalid_message' => 'Les mots de passe doivent être les mêmes',
+                'invalid_message' => ErrorEnum::ERROR_PASSWORD_NOT_MATCH->value,
                 // instead of being set onto the object directly,
                 // this is read and encoded in the controller
                 'options' => [
@@ -50,7 +50,8 @@ class RegisterFormType extends AbstractType
                         ]),
                         new Length([
                             'min' => 6,
-                            'minMessage' => 'Your password should be at least {{ limit }} characters',
+                            'minMessage' => ErrorEnum::PASSWORD_TOO_SHORT->value,
+                            'maxMessage' => ErrorEnum::PASSWORD_TOO_LONG->value,
                             // max length allowed by Symfony for security reasons
                             'max' => 4096,
                         ]),
