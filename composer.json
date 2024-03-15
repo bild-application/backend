@@ -16,8 +16,10 @@
         "fakerphp/faker": "^1.23",
         "friendsofsymfony/rest-bundle": "^3.6",
         "jms/serializer-bundle": "^5.4",
+        "nelmio/api-doc-bundle": "^4.24",
         "runtime/frankenphp-symfony": "^0.2.0",
         "sensio/framework-extra-bundle": "*",
+        "symfony/asset": "6.4.*",
         "symfony/console": "6.4.*",
         "symfony/dotenv": "6.4.*",
         "symfony/flex": "^2",
@@ -25,9 +27,12 @@
         "symfony/framework-bundle": "6.4.*",
         "symfony/runtime": "6.4.*",
         "symfony/security-bundle": "6.4.*",
+        "symfony/twig-bundle": "6.4.*",
         "symfony/uid": "6.4.*",
         "symfony/validator": "6.4.*",
-        "symfony/yaml": "6.4.*"
+        "symfony/yaml": "6.4.*",
+        "twig/extra-bundle": "^2.12|^3.0",
+        "twig/twig": "^2.12|^3.0"
     },
     "config": {
         "allow-plugins": {
