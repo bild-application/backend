@@ -31,6 +31,8 @@ enum ErrorEnum: string
 
     case MEDIA_TYPE_INVALID = 'media_type_invalid';
 
+    case NEED_AGREE_TERMS = 'need_agree_terms';
+
     case DATE_INVALID = 'date_invalid';
 
     case SURVEY_ALREADY_DONE = 'survey_already_done';
