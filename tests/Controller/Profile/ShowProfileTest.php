@@ -8,54 +8,29 @@ use App\Tests\Base\AbstractTest;
 use Symfony\Component\HttpFoundation\Response;
 use Zenstruck\Foundry\Test\Factories;
 
-class DeleteProfileTest extends AbstractTest
+class ShowProfileTest extends AbstractTest
 {
     use Factories;
 
-    public function testCanDeleteProfileUserOwn(): void
+    public function testCanSeeProfileUserOwn(): void
     {
         // Arrange & pre-assert
         $profile = ProfileFactory::createOne(['user' => UserFactory::createOne()]);
         $user = $profile->getUser();
 
-        ProfileFactory::assert()->count(1);
         UserFactory::assert()->count(1);
+        ProfileFactory::assert()->count(1);
 
         $this->client->loginUser($user);
 
         // Act
-        $this->delete(
-            uri: "/api/profiles/{$profile->getId()}",
+        $this->get(
+            uri: "/api/profile/{$profile->getId()}",
             headers: ['CONTENT_TYPE' => 'application/json']
         );
 
         // Assert
         self::assertResponseIsSuccessful();
-        ProfileFactory::assert()->count(0);
-        UserFactory::assert()->count(1);
-    }
-
-    public function testCannotDeleteWithoutId(): void
-    {
-        // Arrange & pre-assert
-        $profile = ProfileFactory::createOne(['user' => UserFactory::createOne()]);
-        $user = $profile->getUser();
-
-        ProfileFactory::assert()->count(1);
-        UserFactory::assert()->count(1);
-
-        $this->client->loginUser($user);
-
-        // Act
-        $this->delete(
-            uri: "/api/profiles/{$profile->getId()}",
-            headers: ['CONTENT_TYPE' => 'application/json']
-        );
-
-        // Assert
-        self::assertResponseStatusCodeSame(Response::HTTP_BAD_REQUEST);
-        ProfileFactory::assert()->count(1);
-        UserFactory::assert()->count(1);
     }
 
     public function testCannotDeleteNonExistentId(): void
@@ -72,7 +47,7 @@ class DeleteProfileTest extends AbstractTest
         $this->client->loginUser($user);
 
         // Act
-        $this->delete(
+        $this->get(
             uri: "/api/profiles/{$profileId}",
             headers: ['CONTENT_TYPE' => 'application/json']
         );
@@ -83,43 +58,38 @@ class DeleteProfileTest extends AbstractTest
         UserFactory::assert()->count(1);
     }
 
-    public function testCannotDeleteProfileUserDontOwn(): void
+    public function testCannotSeeProfileUserDontOwn(): void
     {
         // Arrange & pre-assert
         $profile = ProfileFactory::createOne(['user' => UserFactory::createOne()]);
         $notTheOwner = UserFactory::createOne()->object();
-        $this->client->loginUser($notTheOwner);
 
         UserFactory::assert()->count(2);
-        ProfileFactory::assert()->count(1);
+
+        $this->client->loginUser($notTheOwner);
 
         // Act
-        $this->delete(
+        $this->get(
             uri: "/api/profiles/{$profile->getId()}",
             headers: ['CONTENT_TYPE' => 'application/json']
         );
 
         // Assert
         self::assertResponseStatusCodeSame(Response::HTTP_UNAUTHORIZED);
-        ProfileFactory::assert()->count(1);
     }
 
-    public function testCannotDeleteWhenGuest(): void
+    public function testCannotListWhenGuest(): void
     {
         // Arrange & pre-assert
         $profile = ProfileFactory::createOne(['user' => UserFactory::createOne()]);
 
-        UserFactory::assert()->count(1);
-        ProfileFactory::assert()->count(1);
-
         // Act
-        $this->delete(
+        $this->get(
             uri: "/api/profiles/{$profile->getId()}",
             headers: ['CONTENT_TYPE' => 'application/json']
         );
 
         // Assert
         self::assertResponseStatusCodeSame(Response::HTTP_UNAUTHORIZED);
-        ProfileFactory::assert()->count(1);
     }
 }

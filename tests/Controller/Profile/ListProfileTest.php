@@ -7,76 +7,73 @@ use App\Factory\UserFactory;
 use App\Tests\Base\AbstractTest;
 use Symfony\Component\HttpFoundation\Response;
 use Zenstruck\Foundry\Test\Factories;
-use function json_encode;
-use const JSON_THROW_ON_ERROR;
 
-class CreateProfileTest extends AbstractTest
+class ListProfileTest extends AbstractTest
 {
     use Factories;
 
-    public function testCanCreate(): void
+    public function testCanListProfileUserOwn(): void
     {
+        $this->markTestIncomplete('TODO : assert response not empty array');
+
         // Arrange & pre-assert
-        $user = UserFactory::createOne()->object();
+        $userProxy = UserFactory::createOne();
+        ProfileFactory::createMany(2, ['user' => $userProxy]);
+        $user = $userProxy->object();
 
         UserFactory::assert()->count(1);
-        ProfileFactory::assert()->count(0);
+        ProfileFactory::assert()->count(2);
 
         $this->client->loginUser($user);
 
         // Act
-        $this->post(
+        $this->get(
             uri: '/api/profiles',
-            content: json_encode([
-                'name' => 'Paul',
-            ], JSON_THROW_ON_ERROR),
             headers: ['CONTENT_TYPE' => 'application/json']
         );
 
         // Assert
         self::assertResponseIsSuccessful();
-        ProfileFactory::assert()->count(1);
     }
 
-    public function testCannotCreateWithoutName(): void
+    public function testCannotListProfilesUserDontOwn(): void
     {
+        $this->markTestIncomplete('TODO : assert response empty array');
+
         // Arrange & pre-assert
         $user = UserFactory::createOne()->object();
+        ProfileFactory::createMany(2, ['user' => UserFactory::createOne()]);
 
         UserFactory::assert()->count(1);
-        ProfileFactory::assert()->count(0);
+        ProfileFactory::assert()->count(2);
 
         $this->client->loginUser($user);
 
         // Act
-        $this->post(
+        $this->get(
             uri: '/api/profiles',
-            content: json_encode([
-            ], JSON_THROW_ON_ERROR),
             headers: ['CONTENT_TYPE' => 'application/json']
         );
 
         // Assert
-        self::assertResponseStatusCodeSame(Response::HTTP_BAD_REQUEST);
-        ProfileFactory::assert()->count(0);
+        self::assertResponseIsSuccessful();
     }
 
-    public function testCannotCreateWhenGuest(): void
+    public function testCannotListWhenGuest(): void
     {
         // Arrange & pre-assert
-        ProfileFactory::assert()->count(0);
+        ProfileFactory::createMany(2, ['user' => UserFactory::createOne()]);
+
+        UserFactory::assert()->count(1);
+        ProfileFactory::assert()->count(2);
 
         // Act
-        $this->post(
+        $this->get(
             uri: '/api/profiles',
-            content: json_encode([
-                'name' => 'Paul',
-            ], JSON_THROW_ON_ERROR),
             headers: ['CONTENT_TYPE' => 'application/json']
         );
 
         // Assert
         self::assertResponseStatusCodeSame(Response::HTTP_UNAUTHORIZED);
-        ProfileFactory::assert()->count(0);
     }
 }
