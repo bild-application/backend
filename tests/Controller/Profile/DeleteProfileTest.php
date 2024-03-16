@@ -113,9 +113,9 @@ class DeleteProfileTest extends AbstractTest
         UserFactory::assert()->count(1);
         ProfileFactory::assert()->count(1);
 
-        // Act
         $this->expectException(AccessDeniedException::class);
 
+        // Act
         $this->delete(
             uri: "/api/profiles/{$profile->getId()}",
             headers: ['CONTENT_TYPE' => 'application/json']

@@ -5,7 +5,7 @@ namespace App\Tests\Controller\Profile;
 use App\Factory\ProfileFactory;
 use App\Factory\UserFactory;
 use App\Tests\Base\AbstractTest;
-use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Zenstruck\Foundry\Test\Factories;
 
 class ListProfileTest extends AbstractTest
@@ -67,13 +67,12 @@ class ListProfileTest extends AbstractTest
         UserFactory::assert()->count(1);
         ProfileFactory::assert()->count(2);
 
+        $this->expectException(AccessDeniedException::class);
+
         // Act
         $this->get(
             uri: '/api/profiles',
             headers: ['CONTENT_TYPE' => 'application/json']
         );
-
-        // Assert
-        self::assertResponseStatusCodeSame(Response::HTTP_UNAUTHORIZED);
     }
 }

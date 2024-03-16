@@ -6,6 +6,7 @@ use App\Factory\ProfileFactory;
 use App\Factory\UserFactory;
 use App\Tests\Base\AbstractTest;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Zenstruck\Foundry\Test\Factories;
 use function json_encode;
 use const JSON_THROW_ON_ERROR;
@@ -66,6 +67,8 @@ class CreateProfileTest extends AbstractTest
         // Arrange & pre-assert
         ProfileFactory::assert()->count(0);
 
+        $this->expectException(AccessDeniedException::class);
+
         // Act
         $this->post(
             uri: '/api/profiles',
@@ -76,7 +79,6 @@ class CreateProfileTest extends AbstractTest
         );
 
         // Assert
-        self::assertResponseStatusCodeSame(Response::HTTP_UNAUTHORIZED);
         ProfileFactory::assert()->count(0);
     }
 }
