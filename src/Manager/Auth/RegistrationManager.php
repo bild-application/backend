@@ -20,6 +20,9 @@ class RegistrationManager
     ) {
     }
 
+    /**
+     * @param mixed[] $data
+     */
     public function attemptRegister(array $data): FormInterface|User
     {
         $user = new User();

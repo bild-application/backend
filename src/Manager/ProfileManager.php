@@ -75,13 +75,6 @@ class ProfileManager extends AbstractManager
     {
         $profile = $this->fetch($id);
 
-        if (!$profile) {
-        }
-
-        if ($profile->getUser() !== $this->user) {
-            throw new AccessDeniedException();
-        }
-
         $this->manager->remove($profile);
         $this->manager->flush();
 

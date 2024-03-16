@@ -20,6 +20,9 @@ class SessionManager
     ) {
     }
 
+    /**
+     * @param mixed[] $data
+     */
     public function attemptLogin(array $data): FormInterface
     {
         $user = new User();

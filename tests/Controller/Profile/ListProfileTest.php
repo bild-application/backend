@@ -7,7 +7,6 @@ use App\Factory\UserFactory;
 use App\Tests\Base\AbstractTest;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Zenstruck\Foundry\Test\Factories;
-use function json_encode;
 
 class ListProfileTest extends AbstractTest
 {
