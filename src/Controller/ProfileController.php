@@ -30,6 +30,13 @@ class ProfileController extends AbstractFOSRestController
         return $this->view($this->profileManager->getList(), Response::HTTP_OK);
     }
 
+    #[Rest\Get(path: '/{id}', name: 'profile_show')]
+    #[Rest\View(statusCode: Response::HTTP_OK, serializerGroups: ['profile'])]
+    public function show(string $id): View
+    {
+        return $this->view($this->profileManager->fetch($id), Response::HTTP_OK);
+    }
+
     #[Rest\Post(path: '', name: 'profile_create')]
     #[Rest\View(statusCode: Response::HTTP_CREATED, serializerGroups: ['profile'])]
     public function create(Request $request): View

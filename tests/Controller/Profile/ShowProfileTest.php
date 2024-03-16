@@ -27,7 +27,7 @@ class ShowProfileTest extends AbstractTest
 
         // Act
         $this->get(
-            uri: "/api/profile/{$profile->getId()}",
+            uri: "/api/profiles/{$profile->getId()}",
             headers: ['CONTENT_TYPE' => 'application/json']
         );
 
@@ -72,14 +72,13 @@ class ShowProfileTest extends AbstractTest
 
         $this->client->loginUser($notTheOwner);
 
+        $this->expectException(AccessDeniedException::class);
+
         // Act
         $this->get(
             uri: "/api/profiles/{$profile->getId()}",
             headers: ['CONTENT_TYPE' => 'application/json']
         );
-
-        // Assert
-        self::assertResponseStatusCodeSame(Response::HTTP_UNAUTHORIZED);
     }
 
     public function testCannotSeeProfileWhenGuest(): void

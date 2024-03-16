@@ -2,7 +2,6 @@
 
 namespace App\Manager;
 
-use _PHPStan_de1c07ea6\Symfony\Component\Finder\Exception\AccessDeniedException;
 use App\Entity\Profile;
 use App\Form\ProfileEditType;
 use App\Repository\ProfileRepository;
@@ -10,8 +9,8 @@ use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
-use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
+use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 class ProfileManager extends AbstractManager
 {
@@ -30,6 +29,10 @@ class ProfileManager extends AbstractManager
 
         if (!$profile) {
             throw new NotFoundHttpException();
+        }
+
+        if ($profile->getUser() !== $this->user) {
+            throw new AccessDeniedException();
         }
 
         return $profile;
@@ -71,6 +74,9 @@ class ProfileManager extends AbstractManager
     public function delete(string $id): array
     {
         $profile = $this->fetch($id);
+
+        if (!$profile) {
+        }
 
         if ($profile->getUser() !== $this->user) {
             throw new AccessDeniedException();
