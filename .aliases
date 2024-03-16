@@ -1,25 +1,28 @@
 ### To use aliases, run `source .aliases`
 
-# Docker Compose
-    alias dc='docker compose'
 
-# Docker Up
-    alias du='docker compose up -d --wait'
+## IMPORTANT ALIASES ##
 
-# Docker Build
-    alias db='docker compose up -d --build'
+    # Docker Compose: "dc"
+        alias dc='docker compose'
 
-# Docker Build no Cache
-    alias dbc='docker compose build --no-cache'
+    # Docker Exec: "de"
+        alias de='docker exec -ti backend-php-1'
 
-# Docker Exec
-    alias de='docker exec -ti backend-php-1'
+    # Php Console: "pc"
+        alias pc='docker exec -ti backend-php-1 php bin/console'
 
-# Php Console
-    docker_php_console() {
-        docker compose exec php bash -c "php bin/console $@"
-    }
-    alias pc='docker_php_console'
+    # Stan: "stan"
+        alias stan='docker exec -ti backend-php-1 vendor/bin/phpstan analyse --level=6 --memory-limit=-1 src'
 
-# Clear
-    alias c=clear
+
+## DOCKER ALIASES ##
+
+    # Docker Up: "du"
+        alias du='docker compose up -d --wait'
+
+    # Docker Build: "db"
+        alias db='docker compose up -d --build'
+
+    # Docker Build no Cache: "dbc"
+        alias dbc='docker compose build --no-cache'
