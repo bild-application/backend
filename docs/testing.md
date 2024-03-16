@@ -2,18 +2,16 @@
 
 ## Mettre en place la BDD de test
 
-Exécuter dans le container php les commandes suivantes :
+### Créer
 
 ```
-php bin/console --env=test doctrine:database:drop --force
-php bin/console --env=test doctrine:database:create
-php bin/console --env=test doctrine:migrations:migrate --no-interaction
-php bin/console --env=test doctrine:fixtures:load
+de ./bin/setup-test-db.sh
 ```
+
+### Re-créer
 
 ## Lancer les tests
 
-Exécuter dans le container php :
 ```
-php bin/phpunit
+de bin/phpunit
 ```
