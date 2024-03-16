@@ -33,7 +33,7 @@ class ShowProfileTest extends AbstractTest
         self::assertResponseIsSuccessful();
     }
 
-    public function testCannotDeleteNonExistentId(): void
+    public function testCannotSeeNonExistentId(): void
     {
         // Arrange & pre-assert
         $profile = ProfileFactory::createOne(['user' => UserFactory::createOne()]);
@@ -78,7 +78,7 @@ class ShowProfileTest extends AbstractTest
         self::assertResponseStatusCodeSame(Response::HTTP_UNAUTHORIZED);
     }
 
-    public function testCannotListWhenGuest(): void
+    public function testCannotSeeProfileWhenGuest(): void
     {
         // Arrange & pre-assert
         $profile = ProfileFactory::createOne(['user' => UserFactory::createOne()]);
