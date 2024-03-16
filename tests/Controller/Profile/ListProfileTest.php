@@ -7,6 +7,7 @@ use App\Factory\UserFactory;
 use App\Tests\Base\AbstractTest;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Zenstruck\Foundry\Test\Factories;
+use function json_encode;
 
 class ListProfileTest extends AbstractTest
 {
@@ -14,8 +15,6 @@ class ListProfileTest extends AbstractTest
 
     public function testCanListProfileUserOwn(): void
     {
-        $this->markTestIncomplete('TODO : assert response not empty array');
-
         // Arrange & pre-assert
         $userProxy = UserFactory::createOne();
         ProfileFactory::createMany(2, ['user' => $userProxy]);
@@ -34,17 +33,17 @@ class ListProfileTest extends AbstractTest
 
         // Assert
         self::assertResponseIsSuccessful();
+        $json = $this->getResponseContent(true);
+        self::assertNotEmpty($json);
     }
 
     public function testCannotListProfilesUserDontOwn(): void
     {
-        $this->markTestIncomplete('TODO : assert response empty array');
-
         // Arrange & pre-assert
         $user = UserFactory::createOne()->object();
         ProfileFactory::createMany(2, ['user' => UserFactory::createOne()]);
 
-        UserFactory::assert()->count(1);
+        UserFactory::assert()->count(2);
         ProfileFactory::assert()->count(2);
 
         $this->client->loginUser($user);
@@ -56,7 +55,8 @@ class ListProfileTest extends AbstractTest
         );
 
         // Assert
-        self::assertResponseIsSuccessful();
+        $json = $this->getResponseContent(true);
+        self::assertEmpty($json);
     }
 
     public function testCannotListWhenGuest(): void
