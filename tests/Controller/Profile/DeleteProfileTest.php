@@ -6,6 +6,7 @@ use App\Factory\ProfileFactory;
 use App\Factory\UserFactory;
 use App\Tests\Base\AbstractTest;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Zenstruck\Foundry\Test\Factories;
 
@@ -72,6 +73,8 @@ class DeleteProfileTest extends AbstractTest
 
         $this->client->loginUser($user);
 
+        $this->expectException(NotFoundHttpException::class);
+
         // Act
         $this->delete(
             uri: "/api/profiles/{$profileId}",
@@ -79,7 +82,6 @@ class DeleteProfileTest extends AbstractTest
         );
 
         // Assert
-        self::assertResponseStatusCodeSame(Response::HTTP_NOT_FOUND);
         ProfileFactory::assert()->count(0);
         UserFactory::assert()->count(1);
     }
