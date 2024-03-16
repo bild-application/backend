@@ -5,6 +5,7 @@ namespace App\Entity;
 use App\Repository\ProfileRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
+use JMS\Serializer\Annotation\Groups;
 use Symfony\Bridge\Doctrine\IdGenerator\UuidGenerator;
 
 #[ORM\Entity(repositoryClass: ProfileRepository::class)]
@@ -14,9 +15,11 @@ class Profile
     #[ORM\Column(type: Types::GUID)]
     #[ORM\GeneratedValue(strategy: 'CUSTOM')]
     #[ORM\CustomIdGenerator(class: UuidGenerator::class)]
+    #[Groups(['profile'])]
     private ?string $id = null;
 
     #[ORM\Column(length: 255)]
+    #[Groups(['profile'])]
     private ?string $name = null;
 
     #[ORM\ManyToOne]
