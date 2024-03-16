@@ -14,7 +14,7 @@ class Profile
     #[ORM\Column(type: Types::GUID)]
     #[ORM\GeneratedValue(strategy: 'CUSTOM')]
     #[ORM\CustomIdGenerator(class: UuidGenerator::class)]
-    private ?int $id = null;
+    private ?string $id = null;
 
     #[ORM\Column(length: 255)]
     private ?string $name = null;
@@ -23,7 +23,7 @@ class Profile
     #[ORM\JoinColumn(nullable: false)]
     private ?User $user = null;
 
-    public function getId(): ?int
+    public function getId(): ?string
     {
         return $this->id;
     }
