@@ -6,6 +6,7 @@ use App\Factory\ProfileFactory;
 use App\Factory\UserFactory;
 use App\Tests\Base\AbstractTest;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Zenstruck\Foundry\Test\Factories;
 
 class DeleteProfileTest extends AbstractTest
@@ -113,13 +114,14 @@ class DeleteProfileTest extends AbstractTest
         ProfileFactory::assert()->count(1);
 
         // Act
+        $this->expectException(AccessDeniedException::class);
+
         $this->delete(
             uri: "/api/profiles/{$profile->getId()}",
             headers: ['CONTENT_TYPE' => 'application/json']
         );
 
         // Assert
-        self::assertResponseStatusCodeSame(Response::HTTP_UNAUTHORIZED);
         ProfileFactory::assert()->count(1);
     }
 }
