@@ -10,6 +10,7 @@ use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
+use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 
 class ContentManager extends AbstractManager
 {
@@ -29,6 +30,10 @@ class ContentManager extends AbstractManager
 
         if (!$content) {
             throw new NotFoundHttpException();
+        }
+
+        if ($content->getUser() !== $this->user) {
+            throw new AccessDeniedException();
         }
 
         return $content;
@@ -59,5 +64,18 @@ class ContentManager extends AbstractManager
         $this->manager->flush();
 
         return $content;
+    }
+
+    /**
+     * @return null[]
+     */
+    public function delete(string $id): array
+    {
+        $content = $this->fetch($id);
+
+        $this->manager->remove($content);
+        $this->manager->flush();
+
+        return [];
     }
 }

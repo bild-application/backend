@@ -42,4 +42,19 @@ class ContentController extends AbstractFOSRestController
     {
         return $this->view($this->contentManager->create($request->request->all(), $profileId), Response::HTTP_CREATED);
     }
+
+    /**
+     * Delete a content. ROLE_USER
+     */
+    #[OA\Response(
+        response: Response::HTTP_NO_CONTENT,
+        description: 'Delete a content',
+        content: []
+    )]
+    #[Rest\Delete(path: '/{id}', name: 'content_delete')]
+    #[Rest\View(statusCode: Response::HTTP_NO_CONTENT)]
+    public function delete(string $id): View
+    {
+        return $this->view($this->contentManager->delete($id), Response::HTTP_NO_CONTENT);
+    }
 }
