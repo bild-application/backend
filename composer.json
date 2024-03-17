@@ -16,6 +16,8 @@
         "fakerphp/faker": "^1.23",
         "friendsofsymfony/rest-bundle": "^3.6",
         "jms/serializer-bundle": "^5.4",
+        "league/flysystem-aws-s3-v3": "^3.25",
+        "league/flysystem-bundle": "^3.3",
         "nelmio/api-doc-bundle": "^4.24",
         "runtime/frankenphp-symfony": "^0.2.0",
         "sensio/framework-extra-bundle": "*",
@@ -94,6 +96,7 @@
         "symfony/phpunit-bridge": "^7.0",
         "symfony/stopwatch": "6.4.*",
         "symfony/web-profiler-bundle": "6.4.*",
+        "symplify/easy-coding-standard": "^12.1",
         "zenstruck/foundry": "^1.36"
     }
 }

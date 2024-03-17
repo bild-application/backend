@@ -1,7 +1,8 @@
 <?php
 
-namespace App\Tests\Controller\Profile;
+namespace App\Tests\Controller\Content;
 
+use App\Factory\ContentFactory;
 use App\Factory\ProfileFactory;
 use App\Factory\UserFactory;
 use App\Tests\Base\AbstractTest;
@@ -10,39 +11,40 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Zenstruck\Foundry\Test\Factories;
 
-class DeleteProfileTest extends AbstractTest
+class DeleteContentTest extends AbstractTest
 {
     use Factories;
 
-    public function testCanDeleteProfileUserOwn(): void
+    public function testCanDeleteContentUserOwn(): void
     {
         // Arrange & pre-assert
-        $profile = ProfileFactory::createOne(['user' => UserFactory::createOne()]);
-        $user = $profile->getUser();
+        $content = ContentFactory::createOne(['user' => UserFactory::createOne()]);
+        $user = $content->getUser();
 
-        ProfileFactory::assert()->count(1);
+        ContentFactory::assert()->count(1);
         UserFactory::assert()->count(1);
 
         $this->client->loginUser($user);
 
         // Act
-        $this->jsonDelete(
-            uri: "/api/profiles/{$profile->getId()}",
+        $this->delete(
+            uri: "/api/contents/{$content->getId()}",
+            headers: ['CONTENT_TYPE' => 'application/json']
         );
 
         // Assert
         self::assertResponseStatusCodeSame(Response::HTTP_NO_CONTENT);
-        ProfileFactory::assert()->count(0);
+        ContentFactory::assert()->count(0);
         UserFactory::assert()->count(1);
     }
 
     public function testCannotDeleteWithoutId(): void
     {
         // Arrange & pre-assert
-        $profile = ProfileFactory::createOne(['user' => UserFactory::createOne()]);
-        $user = $profile->getUser();
+        $content = ContentFactory::createOne(['user' => UserFactory::createOne()]);
+        $user = $content->getUser();
 
-        ProfileFactory::assert()->count(1);
+        ContentFactory::assert()->count(1);
         UserFactory::assert()->count(1);
 
         $this->client->loginUser($user);
@@ -51,12 +53,13 @@ class DeleteProfileTest extends AbstractTest
         $this->expectException(NotFoundHttpException::class);
 
         try {
-            $this->jsonDelete(
-                uri: "/api/profiles/",
+            $this->delete(
+                uri: "/api/contents/",
+                headers: ['CONTENT_TYPE' => 'application/json']
             );
         } catch (NotFoundHttpException $e) {
             // Assert
-            ProfileFactory::assert()->count(1);
+            ContentFactory::assert()->count(1);
             UserFactory::assert()->count(1);
 
             throw $e;
@@ -66,12 +69,12 @@ class DeleteProfileTest extends AbstractTest
     public function testCannotDeleteNonExistentId(): void
     {
         // Arrange & pre-assert
-        $profile = ProfileFactory::createOne(['user' => UserFactory::createOne()]);
-        $user = $profile->getUser();
-        $profileId = $profile->getId();
-        $profile->remove();
+        $content = ContentFactory::createOne(['user' => UserFactory::createOne()]);
+        $user = $content->getUser();
+        $contentId = $content->getId();
+        $content->remove();
 
-        ProfileFactory::assert()->count(0);
+        ContentFactory::assert()->count(0);
         UserFactory::assert()->count(1);
 
         $this->client->loginUser($user);
@@ -81,37 +84,38 @@ class DeleteProfileTest extends AbstractTest
         // Act
         try {
             $this->jsonDelete(
-                uri: "/api/profiles/{$profileId}",
+                uri: "/api/contents/{$contentId}",
             );
         } catch (NotFoundHttpException $e) {
             // Assert
-            ProfileFactory::assert()->count(0);
+            ContentFactory::assert()->count(0);
             UserFactory::assert()->count(1);
 
             throw $e;
         }
     }
 
-    public function testCannotDeleteProfileUserDontOwn(): void
+    public function testCannotDeleteContentUserDontOwn(): void
     {
         // Arrange & pre-assert
-        $profile = ProfileFactory::createOne(['user' => UserFactory::createOne()]);
+        $content = ContentFactory::createOne(['user' => UserFactory::createOne()]);
         $notTheOwner = UserFactory::createOne()->object();
-        $this->client->loginUser($notTheOwner);
 
+        ContentFactory::assert()->count(1);
         UserFactory::assert()->count(2);
-        ProfileFactory::assert()->count(1);
+
+        $this->client->loginUser($notTheOwner);
 
         $this->expectException(AccessDeniedException::class);
 
         // Act
         try {
             $this->jsonDelete(
-                uri: "/api/profiles/{$profile->getId()}",
+                uri: "/api/contents/{$content->getId()}",
             );
         } catch (AccessDeniedException $e) {
             // Assert
-            ProfileFactory::assert()->count(1);
+            ContentFactory::assert()->count(1);
 
             throw $e;
         }
@@ -120,21 +124,21 @@ class DeleteProfileTest extends AbstractTest
     public function testCannotDeleteWhenGuest(): void
     {
         // Arrange & pre-assert
-        $profile = ProfileFactory::createOne(['user' => UserFactory::createOne()]);
+        $content = ContentFactory::createOne(['user' => UserFactory::createOne()]);
 
         UserFactory::assert()->count(1);
-        ProfileFactory::assert()->count(1);
+        ContentFactory::assert()->count(1);
 
         $this->expectException(AccessDeniedException::class);
 
         // Act
         try {
             $this->jsonDelete(
-                uri: "/api/profiles/{$profile->getId()}",
+                uri: "/api/contents/{$content->getId()}",
             );
         } catch (AccessDeniedException $e) {
             // Assert
-            ProfileFactory::assert()->count(1);
+            ContentFactory::assert()->count(1);
 
             throw $e;
         }
