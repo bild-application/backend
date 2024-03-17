@@ -7,11 +7,8 @@ use App\Factory\ProfileFactory;
 use App\Factory\UserFactory;
 use App\Tests\Base\AbstractTest;
 use Symfony\Component\HttpFoundation\Response;
-use Symfony\Component\HttpKernel\Exception\UnauthorizedHttpException;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Zenstruck\Foundry\Test\Factories;
-use function json_encode;
-use const JSON_THROW_ON_ERROR;
 
 class CreateContentTest extends AbstractTest
 {
@@ -22,7 +19,6 @@ class CreateContentTest extends AbstractTest
         // Arrange & pre-assert
         $user = UserFactory::createOne()->object();
 
-        UserFactory::assert()->count(1);
         ContentFactory::assert()->count(0);
 
         $this->client->loginUser($user);
@@ -43,20 +39,19 @@ class CreateContentTest extends AbstractTest
     public function testCanCreateWithTheirProfileAsOwner(): void
     {
         // Arrange & pre-assert
-        $profile = ProfileFactory::createOne(['user' => UserFactory::createOne()]);
-        $user = $profile->getUser();
+        $userProxy = UserFactory::createOne();
+        $profileProxy = ProfileFactory::createOne(['user' => $userProxy]);
 
-        UserFactory::assert()->count(1);
-        ProfileFactory::assert()->count(1);
         ContentFactory::assert()->count(0);
 
-        $this->client->loginUser($user);
+        $this->client->loginUser($userProxy->object());
 
         // Act
         $this->jsonPost(
-            uri: "/api/contents/{$profile->getId()}",
+            uri: "/api/contents",
             content: [
                 'name' => 'Chat',
+                'profile' => $profileProxy->getId(),
             ],
         );
 
@@ -68,12 +63,10 @@ class CreateContentTest extends AbstractTest
     public function testCannotCreateWithOtherUserProfileAsOwner(): void
     {
         // Arrange & pre-assert
-        $profile = ProfileFactory::createOne(['user' => UserFactory::createOne()]);
-        $otherUserProfile = ProfileFactory::createOne(['user' => UserFactory::createOne()]);
-        $user = $profile->getUser();
+        $profileProxy = ProfileFactory::createOne(['user' => UserFactory::createOne()]);
+        $otherUserProfileProxy = ProfileFactory::createOne(['user' => UserFactory::createOne()]);
+        $user = $profileProxy->getUser();
 
-        UserFactory::assert()->count(2);
-        ProfileFactory::assert()->count(2);
         ContentFactory::assert()->count(0);
 
         $this->client->loginUser($user);
@@ -83,9 +76,10 @@ class CreateContentTest extends AbstractTest
         // Act
         try {
             $this->jsonPost(
-                uri: "/api/contents/{$otherUserProfile->getId()}",
+                uri: "/api/contents",
                 content: [
                     'name' => 'Chat',
+                    'profile' => $otherUserProfileProxy->getId(),
                 ],
             );
         } catch (AccessDeniedException $e) {
@@ -100,14 +94,13 @@ class CreateContentTest extends AbstractTest
         // Arrange & pre-assert
         $user = UserFactory::createOne()->object();
 
-        UserFactory::assert()->count(1);
         ContentFactory::assert()->count(0);
 
         $this->client->loginUser($user);
 
         // Act
         $this->jsonPost(
-            uri: "/api/contents/{$user->getId()}",
+            uri: "/api/contents",
             content: [],
         );
 

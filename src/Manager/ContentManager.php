@@ -54,7 +54,7 @@ class ContentManager extends AbstractManager
     /**
      * @param mixed[] $data
      */
-    public function create(array $data, ?string $profileId): FormInterface|Content
+    public function create(array $data): FormInterface|Content
     {
         $content = new Content();
 
@@ -65,12 +65,11 @@ class ContentManager extends AbstractManager
             return $form;
         }
 
-        $content->setUser($this->user);
-
-        if ($profileId) {
-            $profile = $this->profileManager->get($profileId);
-            $content->setProfile($profile);
+        if ($content->getProfile() && $content->getProfile()->getUser() !== $this->user) {
+            throw new AccessDeniedException();
         }
+
+        $content->setUser($this->user);
 
         $this->manager->persist($content);
         $this->manager->flush();

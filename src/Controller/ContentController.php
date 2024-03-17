@@ -81,11 +81,10 @@ class ContentController extends AbstractFOSRestController
         content: new Model(type: ContentEditType::class)
     )]
     #[Rest\Post(path: '', name: 'content_create')]
-    #[Rest\Post(path: '/{profileId}', name: 'content_create_profile')]
     #[Rest\View(statusCode: Response::HTTP_CREATED, serializerGroups: ['content'])]
-    public function create(Request $request, ?string $profileId): View
+    public function create(Request $request): View
     {
-        return $this->view($this->contentManager->create($request->request->all(), $profileId), Response::HTTP_CREATED);
+        return $this->view($this->contentManager->create($request->request->all()), Response::HTTP_CREATED);
     }
 
     /**
