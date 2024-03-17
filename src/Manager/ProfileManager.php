@@ -23,9 +23,9 @@ class ProfileManager extends AbstractManager
         parent::__construct($tokenStorage);
     }
 
-    public function fetch(string $id): Profile
+    public function get(string $id): Profile
     {
-        $profile = $this->profileRepository->fetch($id);
+        $profile = $this->profileRepository->get($id);
 
         if (!$profile) {
             throw new NotFoundHttpException();
@@ -41,9 +41,9 @@ class ProfileManager extends AbstractManager
     /**
      * @return Profile[]
      */
-    public function getList(): array
+    public function list(): array
     {
-        return $this->profileRepository->getList($this->user);
+        return $this->profileRepository->list($this->user);
     }
 
     /**
@@ -73,7 +73,7 @@ class ProfileManager extends AbstractManager
      */
     public function delete(string $id): array
     {
-        $profile = $this->fetch($id);
+        $profile = $this->get($id);
 
         $this->manager->remove($profile);
         $this->manager->flush();

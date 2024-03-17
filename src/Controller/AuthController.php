@@ -8,6 +8,7 @@ use App\Manager\Auth\RegistrationManager;
 use App\Manager\Auth\SessionManager;
 use FOS\RestBundle\Controller\AbstractFOSRestController;
 use FOS\RestBundle\Controller\Annotations as Rest;
+use FOS\RestBundle\Controller\Annotations\Route;
 use FOS\RestBundle\View\View;
 use Nelmio\ApiDocBundle\Annotation\Model;
 use OpenApi\Attributes as OA;
@@ -15,6 +16,8 @@ use Symfony\Component\HttpFoundation\Request;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Http\Attribute\CurrentUser;
 
+#[OA\Tag(name: 'Authentication')]
+#[Route(path: '/api/auth')]
 class AuthController extends AbstractFOSRestController
 {
     public function __construct(
@@ -23,22 +26,18 @@ class AuthController extends AbstractFOSRestController
     ) {
     }
 
-    #[OA\RequestBody(
-        description: 'Successful response',
-        content: new Model(type: RegisterFormType::class)
-    )]
+    #[OA\RequestBody(content: new Model(type: RegisterFormType::class))]
     #[OA\Response(
         response: Response::HTTP_CREATED,
-        description: 'Successful response',
+        description: 'User created',
         content: new Model(type: User::class, groups: ['user'])
     )]
     #[OA\Response(
         response: Response::HTTP_BAD_REQUEST,
-        description: 'Validation error',
+        description: 'Validation errors',
         content: new Model(type: RegisterFormType::class)
     )]
-    #[OA\Tag(name: 'auth')]
-    #[Rest\Post('/api/auth/register', name: 'api_auth_register')]
+    #[Rest\Post('/register', name: 'auth_register')]
     #[Rest\View(statusCode: Response::HTTP_CREATED, serializerGroups: ['user'])]
     public function register(Request $request): View
     {
@@ -47,8 +46,7 @@ class AuthController extends AbstractFOSRestController
         );
     }
 
-    #[Rest\Post('/api/auth/login', name: 'api_auth_login')]
-    #[OA\Tag(name: 'auth')]
+    #[Rest\Post('/login', name: 'auth_login')]
     public function login(#[CurrentUser] ?User $user, Request $request): View
     {
         return $this->view(
@@ -56,8 +54,7 @@ class AuthController extends AbstractFOSRestController
         );
     }
 
-    #[Rest\Get('/api/auth/check', name: 'api_auth_check')]
-    #[OA\Tag(name: 'auth')]
+    #[Rest\Get('/check', name: 'auth_check')]
     public function check(#[CurrentUser] ?User $user): Response
     {
         if ($user === null) {

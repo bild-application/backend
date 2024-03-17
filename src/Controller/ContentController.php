@@ -4,6 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Content;
 use App\Enum\RoleEnum;
+use App\Form\ContentEditType;
 use App\Form\ProfileEditType;
 use App\Manager\ContentManager;
 use FOS\RestBundle\Controller\AbstractFOSRestController;
@@ -27,11 +28,29 @@ class ContentController extends AbstractFOSRestController
     }
 
     /**
-     * List contents. ROLE_USER
+     * Get a content owned by logged user
      */
     #[OA\Response(
         response: Response::HTTP_OK,
-        description: 'List contents',
+        description: 'Content',
+        content: new OA\MediaType(
+            mediaType: "application/json",
+            schema: new OA\Schema(ref: new Model(type: Content::class, groups: ["content"]))
+        )
+    )]
+    #[Rest\Get(path: '/{contentId}', name: 'content_get')]
+    #[Rest\View(statusCode: Response::HTTP_OK, serializerGroups: ['content'])]
+    public function get(string $contentId): View
+    {
+        return $this->view($this->contentManager->get($contentId), Response::HTTP_OK);
+    }
+
+    /**
+     * List contents owned by logged user
+     */
+    #[OA\Response(
+        response: Response::HTTP_OK,
+        description: 'Contents list',
         content: new OA\MediaType(
             mediaType: "application/json",
             schema: new OA\Schema(
@@ -48,32 +67,19 @@ class ContentController extends AbstractFOSRestController
     }
 
     /**
-     * Show content. ROLE_USER
+     * Create a content owned by logged user
      */
-    #[OA\Response(
-        response: Response::HTTP_OK,
-        description: 'Show content',
-        content: new OA\MediaType(
-            mediaType: "application/json",
-            schema: new OA\Schema(ref: new Model(type: Content::class, groups: ["content"]))
-        )
-    )]
-    #[Rest\Get(path: '/{contentId}', name: 'content_show')]
-    #[Rest\View(statusCode: Response::HTTP_OK, serializerGroups: ['content'])]
-    public function show(string $contentId): View
-    {
-        return $this->view($this->contentManager->fetch($contentId), Response::HTTP_OK);
-    }
-
-    /**
-     * Create content. ROLE_USER
-     */
+    #[OA\RequestBody(content: new Model(type: ProfileEditType::class))]
     #[OA\Response(
         response: Response::HTTP_CREATED,
-        description: 'Create content',
+        description: 'Content created',
         content: new Model(type: Content::class, groups: ['content'])
     )]
-    #[OA\RequestBody(content: new Model(type: ProfileEditType::class))]
+    #[OA\Response(
+        response: Response::HTTP_BAD_REQUEST,
+        description: 'Validation errors',
+        content: new Model(type: ContentEditType::class)
+    )]
     #[Rest\Post(path: '', name: 'content_create')]
     #[Rest\Post(path: '/{profileId}', name: 'content_create_profile')]
     #[Rest\View(statusCode: Response::HTTP_CREATED, serializerGroups: ['content'])]
@@ -83,11 +89,11 @@ class ContentController extends AbstractFOSRestController
     }
 
     /**
-     * Delete a content. ROLE_USER
+     * Delete a content owned by logged user
      */
     #[OA\Response(
         response: Response::HTTP_NO_CONTENT,
-        description: 'Delete a content',
+        description: 'Content deleted',
         content: []
     )]
     #[Rest\Delete(path: '/{id}', name: 'content_delete')]

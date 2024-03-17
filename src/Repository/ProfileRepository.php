@@ -22,7 +22,7 @@ class ProfileRepository extends ServiceEntityRepository
         parent::__construct($registry, Profile::class);
     }
 
-    public function fetch(string $id): ?Profile
+    public function get(string $id): ?Profile
     {
         return $this->createQueryBuilder('p')
             ->where('p.id = :id')
@@ -34,7 +34,7 @@ class ProfileRepository extends ServiceEntityRepository
     /**
      * @return Profile[]
      */
-    public function getList(User $user): array
+    public function list(User $user): array
     {
         return $this->createQueryBuilder('p')
             ->select('DISTINCT p')

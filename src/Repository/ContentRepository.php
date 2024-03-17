@@ -21,7 +21,7 @@ class ContentRepository extends ServiceEntityRepository
         parent::__construct($registry, Content::class);
     }
 
-    public function fetch(string $id): ?Content
+    public function get(string $id): ?Content
     {
         return $this->createQueryBuilder('c')
             ->where('c.id = :id')

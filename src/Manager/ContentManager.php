@@ -36,9 +36,9 @@ class ContentManager extends AbstractManager
         return $this->contentRepository->list($this->user->getId());
     }
 
-    public function fetch(string $id): Content
+    public function get(string $id): Content
     {
-        $content = $this->contentRepository->fetch($id);
+        $content = $this->contentRepository->get($id);
 
         if (!$content) {
             throw new NotFoundHttpException();
@@ -68,7 +68,7 @@ class ContentManager extends AbstractManager
         $content->setUser($this->user);
 
         if ($profileId) {
-            $profile = $this->profileManager->fetch($profileId);
+            $profile = $this->profileManager->get($profileId);
             $content->setProfile($profile);
         }
 
@@ -83,7 +83,7 @@ class ContentManager extends AbstractManager
      */
     public function delete(string $id): array
     {
-        $content = $this->fetch($id);
+        $content = $this->get($id);
 
         $this->manager->remove($content);
         $this->manager->flush();

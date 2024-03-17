@@ -27,41 +27,41 @@ class ProfileController extends AbstractFOSRestController
     }
 
     /**
-     * Return a profile. ROLE_USER
+     * Get a profile owned by logged user
      */
     #[OA\Response(
         response: Response::HTTP_OK,
-        description: 'Return a profile',
+        description: 'Profile',
         content: new Model(type: Profile::class, groups: ['profile'])
     )]
-    #[Rest\Get(path: '/{id}', name: 'profile_show')]
+    #[Rest\Get(path: '/{id}', name: 'profile_get')]
     #[Rest\View(statusCode: Response::HTTP_OK, serializerGroups: ['profile'])]
-    public function show(string $id): View
+    public function get(string $id): View
     {
-        return $this->view($this->profileManager->fetch($id), Response::HTTP_OK);
+        return $this->view($this->profileManager->get($id), Response::HTTP_OK);
     }
 
     /**
-     * Returns list of user profiles. ROLE_USER
+     * List profiles owned by logged user
      */
     #[OA\Response(
         response: Response::HTTP_OK,
-        description: 'Returns list of user profiles',
+        description: 'Profiles list',
         content: new Model(type: Profile::class, groups: ['profile'])
     )]
-    #[Rest\Get(path: '', name: 'profile_index')]
+    #[Rest\Get(path: '', name: 'profile_list')]
     #[Rest\View(statusCode: Response::HTTP_OK, serializerGroups: ['profile'])]
-    public function getList(): View
+    public function list(): View
     {
-        return $this->view($this->profileManager->getList(), Response::HTTP_OK);
+        return $this->view($this->profileManager->list(), Response::HTTP_OK);
     }
 
     /**
-     * Create profile. ROLE_USER
+     * Create a profile owned by logged user
      */
     #[OA\Response(
         response: Response::HTTP_CREATED,
-        description: 'Create profile',
+        description: 'Profile created',
         content: new Model(type: Profile::class, groups: ['profile'])
     )]
     #[OA\RequestBody(content: new Model(type: ProfileEditType::class))]
@@ -73,11 +73,11 @@ class ProfileController extends AbstractFOSRestController
     }
 
     /**
-     * Delete a profile. ROLE_USER
+     * Delete a profile owned by logged user
      */
     #[OA\Response(
         response: Response::HTTP_NO_CONTENT,
-        description: 'Delete a profile',
+        description: 'Profile deleted',
         content: []
     )]
     #[Rest\Delete(path: '/{id}', name: 'profile_delete')]
