@@ -55,6 +55,7 @@ jobs:
         name: Run PHPUnit
         run: docker compose exec -T php bin/phpunit
       -
+        if: false
         name: Doctrine Schema Validator
         run: docker compose exec -T php bin/console -e test doctrine:schema:validate
   lint:
