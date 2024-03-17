@@ -48,6 +48,24 @@ class ContentController extends AbstractFOSRestController
     }
 
     /**
+     * Show content. ROLE_USER
+     */
+    #[OA\Response(
+        response: Response::HTTP_OK,
+        description: 'Show content',
+        content: new OA\MediaType(
+            mediaType: "application/json",
+            schema: new OA\Schema(ref: new Model(type: Content::class, groups: ["content"]))
+        )
+    )]
+    #[Rest\Get(path: '/{contentId}', name: 'content_show')]
+    #[Rest\View(statusCode: Response::HTTP_OK, serializerGroups: ['content'])]
+    public function show(string $contentId): View
+    {
+        return $this->view($this->contentManager->fetch($contentId), Response::HTTP_OK);
+    }
+
+    /**
      * Create content. ROLE_USER
      */
     #[OA\Response(
