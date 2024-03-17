@@ -27,9 +27,8 @@ class DeleteProfileTest extends AbstractTest
         $this->client->loginUser($user);
 
         // Act
-        $this->delete(
+        $this->jsonDelete(
             uri: "/api/profiles/{$profile->getId()}",
-            headers: ['CONTENT_TYPE' => 'application/json']
         );
 
         // Assert
@@ -52,9 +51,8 @@ class DeleteProfileTest extends AbstractTest
         // Act
         $this->expectException(NotFoundHttpException::class);
 
-        $this->delete(
+        $this->jsonDelete(
             uri: "/api/profiles/",
-            headers: ['CONTENT_TYPE' => 'application/json']
         );
 
         // Assert
@@ -78,9 +76,8 @@ class DeleteProfileTest extends AbstractTest
         $this->expectException(NotFoundHttpException::class);
 
         // Act
-        $this->delete(
+        $this->jsonDelete(
             uri: "/api/profiles/{$profileId}",
-            headers: ['CONTENT_TYPE' => 'application/json']
         );
 
         // Assert
@@ -101,9 +98,8 @@ class DeleteProfileTest extends AbstractTest
         $this->expectException(AccessDeniedException::class);
 
         // Act
-        $this->delete(
+        $this->jsonDelete(
             uri: "/api/profiles/{$profile->getId()}",
-            headers: ['CONTENT_TYPE' => 'application/json']
         );
 
         // Assert
@@ -121,9 +117,8 @@ class DeleteProfileTest extends AbstractTest
         $this->expectException(AccessDeniedException::class);
 
         // Act
-        $this->delete(
+        $this->jsonDelete(
             uri: "/api/profiles/{$profile->getId()}",
-            headers: ['CONTENT_TYPE' => 'application/json']
         );
 
         // Assert

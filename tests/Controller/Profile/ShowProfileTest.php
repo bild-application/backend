@@ -26,9 +26,8 @@ class ShowProfileTest extends AbstractTest
         $this->client->loginUser($user);
 
         // Act
-        $this->get(
+        $this->jsonGet(
             uri: "/api/profiles/{$profile->getId()}",
-            headers: ['CONTENT_TYPE' => 'application/json']
         );
 
         // Assert
@@ -51,9 +50,8 @@ class ShowProfileTest extends AbstractTest
         $this->expectException(NotFoundHttpException::class);
 
         // Act
-        $this->get(
+        $this->jsonGet(
             uri: "/api/profiles/{$profileId}",
-            headers: ['CONTENT_TYPE' => 'application/json']
         );
 
         // Assert
@@ -75,9 +73,8 @@ class ShowProfileTest extends AbstractTest
         $this->expectException(AccessDeniedException::class);
 
         // Act
-        $this->get(
+        $this->jsonGet(
             uri: "/api/profiles/{$profile->getId()}",
-            headers: ['CONTENT_TYPE' => 'application/json']
         );
     }
 
@@ -89,9 +86,8 @@ class ShowProfileTest extends AbstractTest
         $this->expectException(AccessDeniedException::class);
 
         // Act
-        $this->get(
+        $this->jsonGet(
             uri: "/api/profiles/{$profile->getId()}",
-            headers: ['CONTENT_TYPE' => 'application/json']
         );
     }
 }

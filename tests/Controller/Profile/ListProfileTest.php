@@ -26,14 +26,13 @@ class ListProfileTest extends AbstractTest
         $this->client->loginUser($user);
 
         // Act
-        $this->get(
+        $this->jsonGet(
             uri: '/api/profiles',
-            headers: ['CONTENT_TYPE' => 'application/json']
         );
 
         // Assert
         self::assertResponseIsSuccessful();
-        $json = $this->getResponseContent(true);
+        $json = $this->jsonResponseContent();
         self::assertNotEmpty($json);
     }
 
@@ -49,13 +48,12 @@ class ListProfileTest extends AbstractTest
         $this->client->loginUser($user);
 
         // Act
-        $this->get(
+        $this->jsonGet(
             uri: '/api/profiles',
-            headers: ['CONTENT_TYPE' => 'application/json']
         );
 
         // Assert
-        $json = $this->getResponseContent(true);
+        $json = $this->jsonResponseContent();
         self::assertEmpty($json);
     }
 
@@ -70,9 +68,8 @@ class ListProfileTest extends AbstractTest
         $this->expectException(AccessDeniedException::class);
 
         // Act
-        $this->get(
+        $this->jsonGet(
             uri: '/api/profiles',
-            headers: ['CONTENT_TYPE' => 'application/json']
         );
     }
 }

@@ -11,17 +11,16 @@ class RegisterTest extends AbstractTest
 {
     public function testCanRegister(): void
     {
-        $this->post(
+        $this->jsonPost(
             uri: '/api/auth/register',
-            content: json_encode([
+            content: [
                 'email' => 'user@email.com',
                 'password' => [
                     'first' => 'password',
                     'second' => 'password',
                 ],
                 'agreeTerms' => true,
-            ], JSON_THROW_ON_ERROR),
-            headers: ['CONTENT_TYPE' => 'application/json']
+            ],
         );
 
         self::assertResponseIsSuccessful();
@@ -29,17 +28,16 @@ class RegisterTest extends AbstractTest
 
     public function testReturnErrorIfInvalidEmail(): void
     {
-        $this->post(
+        $this->jsonPost(
             uri: '/api/auth/register',
-            content: json_encode([
+            content: [
                 'email' => 'user@email',
                 'password' => [
                     'first' => 'password',
                     'second' => 'password',
                 ],
                 'agreeTerms' => true,
-            ], JSON_THROW_ON_ERROR),
-            headers: ['CONTENT_TYPE' => 'application/json']
+            ],
         );
 
         self::assertResponseStatusCodeSame(Response::HTTP_BAD_REQUEST);
@@ -51,17 +49,16 @@ class RegisterTest extends AbstractTest
 
         //todo generate a user with same email in bdd
 
-        $this->post(
+        $this->jsonPost(
             uri: '/api/auth/register',
-            content: json_encode([
+            content: [
                 'email' => 'user@email',
                 'password' => [
                     'first' => 'password',
                     'second' => 'password',
                 ],
                 'agreeTerms' => true,
-            ], JSON_THROW_ON_ERROR),
-            headers: ['CONTENT_TYPE' => 'application/json']
+            ],
         );
 
         self::assertResponseStatusCodeSame(Response::HTTP_BAD_REQUEST);
@@ -69,13 +66,12 @@ class RegisterTest extends AbstractTest
 
     public function testReturnErrorIfNoPassword(): void
     {
-        $this->post(
+        $this->jsonPost(
             uri: '/api/auth/register',
-            content: json_encode([
+            content: [
                 'email' => 'user@email',
                 'agreeTerms' => true,
-            ], JSON_THROW_ON_ERROR),
-            headers: ['CONTENT_TYPE' => 'application/json']
+            ],
         );
 
         self::assertResponseStatusCodeSame(Response::HTTP_BAD_REQUEST);
@@ -83,17 +79,16 @@ class RegisterTest extends AbstractTest
 
     public function testReturnErrorIfNotSamePassword(): void
     {
-        $this->post(
+        $this->jsonPost(
             uri: '/api/auth/register',
-            content: json_encode([
+            content: [
                 'email' => 'user@email',
                 'password' => [
                     'first' => 'password1',
                     'second' => 'password2',
                 ],
                 'agreeTerms' => true,
-            ], JSON_THROW_ON_ERROR),
-            headers: ['CONTENT_TYPE' => 'application/json']
+            ],
         );
 
         self::assertResponseStatusCodeSame(Response::HTTP_BAD_REQUEST);
@@ -101,17 +96,16 @@ class RegisterTest extends AbstractTest
 
     public function testReturnErrorIfTooShortPassword(): void
     {
-        $this->post(
+        $this->jsonPost(
             uri: '/api/auth/register',
-            content: json_encode([
+            content: [
                 'email' => 'user@email',
                 'password' => [
                     'first' => 'pass',
                     'second' => 'pass',
                 ],
                 'agreeTerms' => true,
-            ], JSON_THROW_ON_ERROR),
-            headers: ['CONTENT_TYPE' => 'application/json']
+            ],
         );
 
         self::assertResponseStatusCodeSame(Response::HTTP_BAD_REQUEST);
@@ -119,17 +113,16 @@ class RegisterTest extends AbstractTest
 
     public function testReturnErrorIfTermsAreNotAccepted(): void
     {
-        $this->post(
+        $this->jsonPost(
             uri: '/api/auth/register',
-            content: json_encode([
+            content: [
                 'email' => 'user@email',
                 'password' => [
                     'first' => 'pass',
                     'second' => 'pass',
                 ],
                 'agreeTerms' => false,
-            ], JSON_THROW_ON_ERROR),
-            headers: ['CONTENT_TYPE' => 'application/json']
+            ],
         );
 
         self::assertResponseStatusCodeSame(Response::HTTP_BAD_REQUEST);
