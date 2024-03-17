@@ -3,7 +3,6 @@
 namespace App\Tests\Controller\Content;
 
 use App\Factory\ContentFactory;
-use App\Factory\ProfileFactory;
 use App\Factory\UserFactory;
 use App\Tests\Base\AbstractTest;
 use Symfony\Component\HttpFoundation\Response;

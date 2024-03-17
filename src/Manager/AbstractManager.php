@@ -23,6 +23,7 @@ abstract class AbstractManager
 
         /* @phpstan-ignore-next-line */
         if ($token && $token->getUser() && !is_string($token->getUser())) {
+            /* @phpstan-ignore-next-line */
             $this->user = $token->getUser();
         }
     }

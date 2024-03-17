@@ -5,8 +5,6 @@ namespace App\Tests\Controller\Auth;
 use App\Factory\UserFactory;
 use App\Tests\Base\AbstractTest;
 use Symfony\Component\HttpFoundation\Response;
-use function json_encode;
-use const JSON_THROW_ON_ERROR;
 
 class RegisterTest extends AbstractTest
 {

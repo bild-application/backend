@@ -30,6 +30,9 @@ class ContentRepository extends ServiceEntityRepository
             ->getOneOrNullResult();
     }
 
+    /**
+     * @return Content[]
+     */
     public function list(string $userId): array
     {
         return $this->createQueryBuilder('c')

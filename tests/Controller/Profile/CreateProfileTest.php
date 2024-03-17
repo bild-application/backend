@@ -8,8 +8,6 @@ use App\Tests\Base\AbstractTest;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Zenstruck\Foundry\Test\Factories;
-use function json_encode;
-use const JSON_THROW_ON_ERROR;
 
 class CreateProfileTest extends AbstractTest
 {

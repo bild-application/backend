@@ -3,7 +3,6 @@
 namespace App\Tests\Controller\Auth;
 
 use App\Tests\Base\AbstractTest;
-use function json_encode;
 
 class LoginTest extends AbstractTest
 {
