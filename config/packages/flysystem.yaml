@@ -2,6 +2,12 @@
 flysystem:
     storages:
         default.storage:
+            adapter: 'aws'
+            options:
+                client: Aws\S3\S3Client
+                bucket: '%env(resolve:MINIO_BUCKET)%'
+        
+        local.storage:
             adapter: 'local'
             options:
                 directory: '%kernel.project_dir%/var/storage/default'
