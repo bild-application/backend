@@ -59,7 +59,7 @@ class DeleteContentTest extends AbstractTest
             );
         } catch (NotFoundHttpException $e) {
             // Assert
-            ProfileFactory::assert()->count(1);
+            ContentFactory::assert()->count(1);
             UserFactory::assert()->count(1);
 
             throw $e;
@@ -88,7 +88,7 @@ class DeleteContentTest extends AbstractTest
             );
         } catch (NotFoundHttpException $e) {
             // Assert
-            ProfileFactory::assert()->count(0);
+            ContentFactory::assert()->count(0);
             UserFactory::assert()->count(1);
 
             throw $e;
@@ -115,7 +115,7 @@ class DeleteContentTest extends AbstractTest
             );
         } catch (AccessDeniedException $e) {
             // Assert
-            ProfileFactory::assert()->count(1);
+            ContentFactory::assert()->count(1);
 
             throw $e;
         }
@@ -138,7 +138,7 @@ class DeleteContentTest extends AbstractTest
             );
         } catch (AccessDeniedException $e) {
             // Assert
-            ProfileFactory::assert()->count(1);
+            ContentFactory::assert()->count(1);
 
             throw $e;
         }
