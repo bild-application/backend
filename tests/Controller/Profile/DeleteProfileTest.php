@@ -27,13 +27,12 @@ class DeleteProfileTest extends AbstractTest
         $this->client->loginUser($user);
 
         // Act
-        $this->delete(
+        $this->jsonDelete(
             uri: "/api/profiles/{$profile->getId()}",
-            headers: ['CONTENT_TYPE' => 'application/json']
         );
 
         // Assert
-        self::assertResponseIsSuccessful();
+        self::assertResponseStatusCodeSame(Response::HTTP_NO_CONTENT);
         ProfileFactory::assert()->count(0);
         UserFactory::assert()->count(1);
     }
@@ -52,14 +51,17 @@ class DeleteProfileTest extends AbstractTest
         // Act
         $this->expectException(NotFoundHttpException::class);
 
-        $this->delete(
-            uri: "/api/profiles/",
-            headers: ['CONTENT_TYPE' => 'application/json']
-        );
+        try {
+            $this->jsonDelete(
+                uri: "/api/profiles/",
+            );
+        } catch (NotFoundHttpException $e) {
+            // Assert
+            ProfileFactory::assert()->count(1);
+            UserFactory::assert()->count(1);
 
-        // Assert
-        ProfileFactory::assert()->count(1);
-        UserFactory::assert()->count(1);
+            throw $e;
+        }
     }
 
     public function testCannotDeleteNonExistentId(): void
@@ -78,14 +80,17 @@ class DeleteProfileTest extends AbstractTest
         $this->expectException(NotFoundHttpException::class);
 
         // Act
-        $this->delete(
-            uri: "/api/profiles/{$profileId}",
-            headers: ['CONTENT_TYPE' => 'application/json']
-        );
+        try {
+            $this->jsonDelete(
+                uri: "/api/profiles/{$profileId}",
+            );
+        } catch (NotFoundHttpException $e) {
+            // Assert
+            ProfileFactory::assert()->count(0);
+            UserFactory::assert()->count(1);
 
-        // Assert
-        ProfileFactory::assert()->count(0);
-        UserFactory::assert()->count(1);
+            throw $e;
+        }
     }
 
     public function testCannotDeleteProfileUserDontOwn(): void
@@ -101,13 +106,16 @@ class DeleteProfileTest extends AbstractTest
         $this->expectException(AccessDeniedException::class);
 
         // Act
-        $this->delete(
-            uri: "/api/profiles/{$profile->getId()}",
-            headers: ['CONTENT_TYPE' => 'application/json']
-        );
+        try {
+            $this->jsonDelete(
+                uri: "/api/profiles/{$profile->getId()}",
+            );
+        } catch (AccessDeniedException $e) {
+            // Assert
+            ProfileFactory::assert()->count(1);
 
-        // Assert
-        ProfileFactory::assert()->count(1);
+            throw $e;
+        }
     }
 
     public function testCannotDeleteWhenGuest(): void
@@ -121,12 +129,15 @@ class DeleteProfileTest extends AbstractTest
         $this->expectException(AccessDeniedException::class);
 
         // Act
-        $this->delete(
-            uri: "/api/profiles/{$profile->getId()}",
-            headers: ['CONTENT_TYPE' => 'application/json']
-        );
+        try {
+            $this->jsonDelete(
+                uri: "/api/profiles/{$profile->getId()}",
+            );
+        } catch (AccessDeniedException $e) {
+            // Assert
+            ProfileFactory::assert()->count(1);
 
-        // Assert
-        ProfileFactory::assert()->count(1);
+            throw $e;
+        }
     }
 }

@@ -10,13 +10,12 @@ class LoginTest extends AbstractTest
     public function testCanLogin(): void
     {
         $this->markTestSkipped('TODO');
-        $this->post(
+        $this->jsonPost(
             uri: '/api/auth/login',
-            content: json_encode([
+            content: [
                 'username' => 'admin@admin.fr',
                 'password' => 'admin',
-            ], JSON_THROW_ON_ERROR),
-            headers: ['CONTENT_TYPE' => 'application/json']
+            ],
         );
 
         self::assertResponseIsSuccessful();

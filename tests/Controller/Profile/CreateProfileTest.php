@@ -26,16 +26,15 @@ class CreateProfileTest extends AbstractTest
         $this->client->loginUser($user);
 
         // Act
-        $this->post(
+        $this->jsonPost(
             uri: '/api/profiles',
-            content: json_encode([
+            content: [
                 'name' => 'Paul',
-            ], JSON_THROW_ON_ERROR),
-            headers: ['CONTENT_TYPE' => 'application/json']
+            ],
         );
 
         // Assert
-        self::assertResponseIsSuccessful();
+        self::assertResponseStatusCodeSame(Response::HTTP_CREATED);
         ProfileFactory::assert()->count(1);
     }
 
@@ -50,11 +49,9 @@ class CreateProfileTest extends AbstractTest
         $this->client->loginUser($user);
 
         // Act
-        $this->post(
+        $this->jsonPost(
             uri: '/api/profiles',
-            content: json_encode([
-            ], JSON_THROW_ON_ERROR),
-            headers: ['CONTENT_TYPE' => 'application/json']
+            content: [],
         );
 
         // Assert
@@ -70,15 +67,18 @@ class CreateProfileTest extends AbstractTest
         $this->expectException(AccessDeniedException::class);
 
         // Act
-        $this->post(
-            uri: '/api/profiles',
-            content: json_encode([
-                'name' => 'Paul',
-            ], JSON_THROW_ON_ERROR),
-            headers: ['CONTENT_TYPE' => 'application/json']
-        );
+        try {
+            $this->jsonPost(
+                uri: '/api/profiles',
+                content: [
+                    'name' => 'Paul',
+                ],
+            );
+        } catch (AccessDeniedException $e) {
+            // Assert
+            ProfileFactory::assert()->count(0);
 
-        // Assert
-        ProfileFactory::assert()->count(0);
+            throw $e;
+        }
     }
 }
