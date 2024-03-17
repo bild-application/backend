@@ -24,6 +24,7 @@ class Package
     #[Groups(['package'])]
     private ?string $name = null;
 
+    /** @var Collection<string, Content> */
     #[ORM\ManyToMany(targetEntity: Content::class)]
     #[Groups(['package'])]
     private Collection $contents;
@@ -55,7 +56,7 @@ class Package
     }
 
     /**
-     * @return Collection<int, Content>
+     * @return Collection<string, Content>
      */
     public function getContents(): Collection
     {

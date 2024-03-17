@@ -35,11 +35,11 @@ class PackageController extends AbstractFOSRestController
         content: new Model(type: Package::class, groups: ['package'])
     )]
     #[OA\RequestBody(content: new Model(type: PackageCreateType::class))]
-    #[Rest\Post(path: '/{profileId}', name: 'package_create')]
+    #[Rest\Post(path: '', name: 'package_create')]
     #[Rest\View(statusCode: Response::HTTP_CREATED, serializerGroups: ['package'])]
-    public function create(Request $request, string $profileId): View
+    public function create(Request $request): View
     {
-        return $this->view($this->packageManager->create($request->request->all(), $profileId), Response::HTTP_CREATED);
+        return $this->view($this->packageManager->create($request->request->all()), Response::HTTP_CREATED);
     }
 
     /**

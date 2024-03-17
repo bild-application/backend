@@ -42,7 +42,7 @@ class PackageManager extends AbstractManager
     /**
      * @param mixed[] $data
      */
-    public function create(array $data, string $profileId): FormInterface|Package
+    public function create(array $data): FormInterface|Package
     {
         $package = new Package();
 
@@ -52,9 +52,6 @@ class PackageManager extends AbstractManager
         if (!$form->isValid()) {
             return $form;
         }
-
-        $profile = $this->profileManager->fetch($profileId);
-        $package->setProfile($profile);
 
         $this->manager->persist($package);
         $this->manager->flush();
