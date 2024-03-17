@@ -31,7 +31,7 @@ class ShowProfileTest extends AbstractTest
         );
 
         // Assert
-        self::assertResponseIsSuccessful();
+        self::assertResponseStatusCodeSame(Response::HTTP_OK);
     }
 
     public function testCannotSeeNonExistentId(): void

@@ -34,7 +34,7 @@ class CreateProfileTest extends AbstractTest
         );
 
         // Assert
-        self::assertResponseIsSuccessful();
+        self::assertResponseStatusCodeSame(Response::HTTP_CREATED);
         ProfileFactory::assert()->count(1);
     }
 

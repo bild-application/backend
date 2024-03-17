@@ -24,7 +24,7 @@ class RegisterTest extends AbstractTest
             ],
         );
 
-        self::assertResponseIsSuccessful();
+        self::assertResponseStatusCodeSame(Response::HTTP_CREATED);
     }
 
     public function testReturnErrorIfInvalidEmail(): void

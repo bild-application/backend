@@ -32,7 +32,7 @@ class DeleteProfileTest extends AbstractTest
         );
 
         // Assert
-        self::assertResponseIsSuccessful();
+        self::assertResponseStatusCodeSame(Response::HTTP_NO_CONTENT);
         ProfileFactory::assert()->count(0);
         UserFactory::assert()->count(1);
     }
