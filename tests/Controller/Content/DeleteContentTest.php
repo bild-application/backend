@@ -83,9 +83,8 @@ class DeleteContentTest extends AbstractTest
 
         // Act
         try {
-            $this->delete(
+            $this->jsonDelete(
                 uri: "/api/contents/{$contentId}",
-                headers: ['CONTENT_TYPE' => 'application/json']
             );
         } catch (NotFoundHttpException $e) {
             // Assert
@@ -111,9 +110,8 @@ class DeleteContentTest extends AbstractTest
 
         // Act
         try {
-            $this->delete(
+            $this->jsonDelete(
                 uri: "/api/contents/{$content->getId()}",
-                headers: ['CONTENT_TYPE' => 'application/json']
             );
         } catch (AccessDeniedException $e) {
             // Assert
@@ -135,9 +133,8 @@ class DeleteContentTest extends AbstractTest
 
         // Act
         try {
-            $this->delete(
+            $this->jsonDelete(
                 uri: "/api/contents/{$content->getId()}",
-                headers: ['CONTENT_TYPE' => 'application/json']
             );
         } catch (AccessDeniedException $e) {
             // Assert

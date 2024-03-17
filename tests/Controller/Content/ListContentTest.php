@@ -26,14 +26,13 @@ class ListContentTest extends AbstractTest
         $this->client->loginUser($user);
 
         // Act
-        $this->get(
+        $this->jsonGet(
             uri: "/api/contents",
-            headers: ['CONTENT_TYPE' => 'application/json']
         );
 
         // Assert
         self::assertResponseStatusCodeSame(Response::HTTP_OK);
-        $json = $this->getResponseContent(true);
+        $json = $this->jsonResponseContent();
         self::assertCount(4, $json);
     }
 
@@ -49,14 +48,13 @@ class ListContentTest extends AbstractTest
         $this->client->loginUser($notTheOwner);
 
         // Act
-        $this->get(
+        $this->jsonGet(
             uri: "/api/contents",
-            headers: ['CONTENT_TYPE' => 'application/json']
         );
 
         // Assert
         self::assertResponseStatusCodeSame(Response::HTTP_OK);
-        $json = $this->getResponseContent(true);
+        $json = $this->jsonResponseContent();
         self::assertCount(0, $json);
     }
 
@@ -65,9 +63,8 @@ class ListContentTest extends AbstractTest
         $this->expectException(AccessDeniedException::class);
 
         // Act
-        $this->get(
+        $this->jsonGet(
             uri: "/api/contents",
-            headers: ['CONTENT_TYPE' => 'application/json']
         );
     }
 }

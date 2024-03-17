@@ -28,12 +28,11 @@ class CreateContentTest extends AbstractTest
         $this->client->loginUser($user);
 
         // Act
-        $this->post(
+        $this->jsonPost(
             uri: "/api/contents",
-            content: json_encode([
+            content: [
                 'name' => 'Chat',
-            ], JSON_THROW_ON_ERROR),
-            headers: ['CONTENT_TYPE' => 'application/json']
+            ],
         );
 
         // Assert
@@ -54,12 +53,11 @@ class CreateContentTest extends AbstractTest
         $this->client->loginUser($user);
 
         // Act
-        $this->post(
+        $this->jsonPost(
             uri: "/api/contents/{$profile->getId()}",
-            content: json_encode([
+            content: [
                 'name' => 'Chat',
-            ], JSON_THROW_ON_ERROR),
-            headers: ['CONTENT_TYPE' => 'application/json']
+            ],
         );
 
         // Assert
@@ -84,12 +82,11 @@ class CreateContentTest extends AbstractTest
 
         // Act
         try {
-            $this->post(
+            $this->jsonPost(
                 uri: "/api/contents/{$otherUserProfile->getId()}",
-                content: json_encode([
+                content: [
                     'name' => 'Chat',
-                ], JSON_THROW_ON_ERROR),
-                headers: ['CONTENT_TYPE' => 'application/json']
+                ],
             );
         } catch (AccessDeniedException $e) {
             ContentFactory::assert()->count(0);
@@ -109,11 +106,9 @@ class CreateContentTest extends AbstractTest
         $this->client->loginUser($user);
 
         // Act
-        $this->post(
+        $this->jsonPost(
             uri: "/api/contents/{$user->getId()}",
-            content: json_encode([
-            ], JSON_THROW_ON_ERROR),
-            headers: ['CONTENT_TYPE' => 'application/json']
+            content: [],
         );
 
         // Assert
@@ -130,12 +125,11 @@ class CreateContentTest extends AbstractTest
 
         // Act
         try {
-            $this->post(
+            $this->jsonPost(
                 uri: "/api/contents",
-                content: json_encode([
+                content: [
                     'name' => 'Chat',
-                ], JSON_THROW_ON_ERROR),
-                headers: ['CONTENT_TYPE' => 'application/json']
+                ],
             );
         } catch (AccessDeniedException $e) {
             ContentFactory::assert()->count(0);

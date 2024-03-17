@@ -26,9 +26,8 @@ class ShowContentTest extends AbstractTest
         $this->client->loginUser($user);
 
         // Act
-        $this->get(
+        $this->jsonGet(
             uri: "/api/contents/{$content->getId()}",
-            headers: ['CONTENT_TYPE' => 'application/json']
         );
 
         // Assert
@@ -51,9 +50,8 @@ class ShowContentTest extends AbstractTest
         $this->expectException(NotFoundHttpException::class);
 
         // Act
-        $this->get(
+        $this->jsonGet(
             uri: "/api/contents/{$contentId}",
-            headers: ['CONTENT_TYPE' => 'application/json']
         );
     }
 
@@ -71,9 +69,8 @@ class ShowContentTest extends AbstractTest
         $this->expectException(AccessDeniedException::class);
 
         // Act
-        $this->get(
+        $this->jsonGet(
             uri: "/api/contents/{$content->getId()}",
-            headers: ['CONTENT_TYPE' => 'application/json']
         );
     }
 
@@ -85,9 +82,8 @@ class ShowContentTest extends AbstractTest
         $this->expectException(AccessDeniedException::class);
 
         // Act
-        $this->get(
+        $this->jsonGet(
             uri: "/api/contents/{$content->getId()}",
-            headers: ['CONTENT_TYPE' => 'application/json']
         );
     }
 }
