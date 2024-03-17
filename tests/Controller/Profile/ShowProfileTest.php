@@ -53,11 +53,6 @@ class ShowProfileTest extends AbstractTest
         $this->jsonGet(
             uri: "/api/profiles/{$profileId}",
         );
-
-        // Assert
-        self::assertResponseStatusCodeSame(Response::HTTP_NOT_FOUND);
-        ProfileFactory::assert()->count(0);
-        UserFactory::assert()->count(1);
     }
 
     public function testCannotSeeProfileUserDontOwn(): void

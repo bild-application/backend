@@ -67,14 +67,18 @@ class CreateProfileTest extends AbstractTest
         $this->expectException(AccessDeniedException::class);
 
         // Act
-        $this->jsonPost(
-            uri: '/api/profiles',
-            content: [
-                'name' => 'Paul',
-            ],
-        );
+        try {
+            $this->jsonPost(
+                uri: '/api/profiles',
+                content: [
+                    'name' => 'Paul',
+                ],
+            );
+        } catch (AccessDeniedException $e) {
+            // Assert
+            ProfileFactory::assert()->count(0);
 
-        // Assert
-        ProfileFactory::assert()->count(0);
+            throw $e;
+        }
     }
 }
