@@ -5,6 +5,7 @@ namespace App\Tests\Controller\Profile;
 use App\Factory\ProfileFactory;
 use App\Factory\UserFactory;
 use App\Tests\Base\AbstractTest;
+use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Zenstruck\Foundry\Test\Factories;
