@@ -2,6 +2,7 @@
 
 namespace App\Tests\Controller\Auth;
 
+use App\Factory\UserFactory;
 use App\Tests\Base\AbstractTest;
 use Symfony\Component\HttpFoundation\Response;
 use function json_encode;
@@ -45,14 +46,14 @@ class RegisterTest extends AbstractTest
 
     public function testReturnErrorIfAlreadyTakenEmail(): void
     {
-        $this->markTestSkipped('TODO');
-
-        //todo generate a user with same email in bdd
+        UserFactory::createOne([
+            'email' => 'user@email.com',
+        ]);
 
         $this->jsonPost(
             uri: '/api/auth/register',
             content: [
-                'email' => 'user@email',
+                'email' => 'user@email.com',
                 'password' => [
                     'first' => 'password',
                     'second' => 'password',
