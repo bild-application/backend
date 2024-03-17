@@ -24,6 +24,18 @@ class ContentManager extends AbstractManager
         parent::__construct($tokenStorage);
     }
 
+    /**
+     * @return array<Content>
+     */
+    public function list(): array
+    {
+        if (!$this->user) {
+            throw new AccessDeniedException();
+        }
+
+        return $this->contentRepository->list($this->user->getId());
+    }
+
     public function fetch(string $id): Content
     {
         $content = $this->contentRepository->fetch($id);

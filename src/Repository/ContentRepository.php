@@ -29,4 +29,13 @@ class ContentRepository extends ServiceEntityRepository
             ->getQuery()
             ->getOneOrNullResult();
     }
+
+    public function list(string $userId): array
+    {
+        return $this->createQueryBuilder('c')
+            ->where('c.user = :user_id')
+            ->setParameter('user_id', $userId)
+            ->getQuery()
+            ->getArrayResult();
+    }
 }

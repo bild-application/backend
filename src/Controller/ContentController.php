@@ -27,6 +27,27 @@ class ContentController extends AbstractFOSRestController
     }
 
     /**
+     * List contents. ROLE_USER
+     */
+    #[OA\Response(
+        response: Response::HTTP_OK,
+        description: 'List contents',
+        content: new OA\MediaType(
+            mediaType: "application/json",
+            schema: new OA\Schema(
+                type: "array",
+                items: new OA\Items(ref: new Model(type: Content::class, groups: ["content"]))
+            )
+        )
+    )]
+    #[Rest\Get(path: '', name: 'content_list')]
+    #[Rest\View(statusCode: Response::HTTP_OK, serializerGroups: ['content'])]
+    public function list(): View
+    {
+        return $this->view($this->contentManager->list(), Response::HTTP_OK);
+    }
+
+    /**
      * Create content. ROLE_USER
      */
     #[OA\Response(
