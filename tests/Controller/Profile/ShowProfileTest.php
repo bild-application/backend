@@ -26,13 +26,12 @@ class ShowProfileTest extends AbstractTest
         $this->client->loginUser($user);
 
         // Act
-        $this->get(
+        $this->jsonGet(
             uri: "/api/profiles/{$profile->getId()}",
-            headers: ['CONTENT_TYPE' => 'application/json']
         );
 
         // Assert
-        self::assertResponseIsSuccessful();
+        self::assertResponseStatusCodeSame(Response::HTTP_OK);
     }
 
     public function testCannotSeeNonExistentId(): void
@@ -51,15 +50,9 @@ class ShowProfileTest extends AbstractTest
         $this->expectException(NotFoundHttpException::class);
 
         // Act
-        $this->get(
+        $this->jsonGet(
             uri: "/api/profiles/{$profileId}",
-            headers: ['CONTENT_TYPE' => 'application/json']
         );
-
-        // Assert
-        self::assertResponseStatusCodeSame(Response::HTTP_NOT_FOUND);
-        ProfileFactory::assert()->count(0);
-        UserFactory::assert()->count(1);
     }
 
     public function testCannotSeeProfileUserDontOwn(): void
@@ -75,9 +68,8 @@ class ShowProfileTest extends AbstractTest
         $this->expectException(AccessDeniedException::class);
 
         // Act
-        $this->get(
+        $this->jsonGet(
             uri: "/api/profiles/{$profile->getId()}",
-            headers: ['CONTENT_TYPE' => 'application/json']
         );
     }
 
@@ -89,9 +81,8 @@ class ShowProfileTest extends AbstractTest
         $this->expectException(AccessDeniedException::class);
 
         // Act
-        $this->get(
+        $this->jsonGet(
             uri: "/api/profiles/{$profile->getId()}",
-            headers: ['CONTENT_TYPE' => 'application/json']
         );
     }
 }
