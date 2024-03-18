@@ -75,7 +75,7 @@ class ContentManager extends AbstractManager
         $image = $form->get('image')->getData();
         $imageName = Uuid::v4() . $image->guessExtension();
         $imagePath = Content::STORAGE_FOLDER . "/" . $imageName;
-        $this->fileSystemFacade->storage->write($imagePath, $image);
+        $this->fileSystemFacade->getStorage()->write($imagePath, $image);
 
         $content->setImage($imagePath);
         $content->setUser($this->user);
@@ -93,7 +93,7 @@ class ContentManager extends AbstractManager
     {
         $content = $this->get($id);
 
-        $this->fileSystemFacade->storage->delete($content->getImage());
+        $this->fileSystemFacade->getStorage()->delete($content->getImage());
 
         $this->manager->remove($content);
         $this->manager->flush();

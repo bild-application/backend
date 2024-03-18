@@ -66,7 +66,7 @@ final class ContentFactory extends ModelFactory
     protected function getDefaults(): array
     {
         $imageFsUrl = 'stub/placeholder.png';
-        $this->fileSystemFacade->storage->write($imageFsUrl, file_get_contents(__DIR__ . '/../../tests/Stub/placeholder.jpg'));
+        $this->fileSystemFacade->getStorage()->write($imageFsUrl, file_get_contents(__DIR__ . '/../../tests/Stub/placeholder.jpg'));
 
         return [
             'name' => self::faker()->sentence(),

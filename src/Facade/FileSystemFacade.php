@@ -4,13 +4,20 @@ namespace App\Facade;
 
 use League\Flysystem\FilesystemOperator;
 
-readonly final class FileSystemFacade
+final class FileSystemFacade
 {
-    public FilesystemOperator $storage;
+    protected static FilesystemOperator $storageSingleton;
 
     public function __construct(
         FilesystemOperator $defaultStorage
     ) {
-        $this->storage = $defaultStorage;
+        if (!isset(self::$storageSingleton)) {
+            self::$storageSingleton = $defaultStorage;
+        }
+    }
+
+    public function getStorage(): FilesystemOperator
+    {
+        return self::$storageSingleton;
     }
 }
