@@ -70,7 +70,7 @@ final class ContentFactory extends ModelFactory
 
         return [
             'name' => self::faker()->sentence(),
-            'image_url' => $imageFsUrl,
+            'image' => $imageFsUrl,
         ];
     }
 

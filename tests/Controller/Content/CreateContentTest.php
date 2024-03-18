@@ -41,7 +41,7 @@ class CreateContentTest extends AbstractTest
         // Assert
         self::assertResponseStatusCodeSame(Response::HTTP_CREATED);
         ContentFactory::assert()->count(1);
-        self::assertFsFileExists(ContentFactory::first()->getImageUrl());
+        self::assertFsFileExists(ContentFactory::first()->getImage());
     }
 
     public function testCanCreateWithTheirProfileAsOwner(): void
@@ -61,12 +61,18 @@ class CreateContentTest extends AbstractTest
                 'name' => 'Chat',
                 'profile' => $profileProxy->getId(),
             ],
+            files: [
+                'image' => new UploadedFile(
+                    __DIR__ . '/../../Stub/placeholder.jpg',
+                    'placeholder.jpg'
+                ),
+            ]
         );
 
         // Assert
         self::assertResponseStatusCodeSame(Response::HTTP_CREATED);
         ContentFactory::assert()->count(1);
-        self::assertFsFileExists(ContentFactory::first()->getImageUrl());
+        self::assertFsFileExists(ContentFactory::first()->getImage());
     }
 
     public function testCannotCreateWithOtherUserProfileAsOwner(): void
@@ -90,6 +96,12 @@ class CreateContentTest extends AbstractTest
                     'name' => 'Chat',
                     'profile' => $otherUserProfileProxy->getId(),
                 ],
+                files: [
+                    'image' => new UploadedFile(
+                        __DIR__ . '/../../Stub/placeholder.jpg',
+                        'placeholder.jpg'
+                    ),
+                ]
             );
         } catch (AccessDeniedException $e) {
             ContentFactory::assert()->count(0);
@@ -111,6 +123,62 @@ class CreateContentTest extends AbstractTest
         $this->jsonPost(
             uri: "/api/contents",
             content: [],
+            files: [
+                'image' => new UploadedFile(
+                    __DIR__ . '/../../Stub/placeholder.jpg',
+                    'placeholder.jpg'
+                ),
+            ]
+        );
+
+        // Assert
+        self::assertResponseStatusCodeSame(Response::HTTP_BAD_REQUEST);
+        ContentFactory::assert()->count(0);
+    }
+
+    public function testCannotCreateWithoutImage(): void
+    {
+        // Arrange & pre-assert
+        $user = UserFactory::createOne()->object();
+
+        ContentFactory::assert()->count(0);
+
+        $this->client->loginUser($user);
+
+        // Act
+        $this->jsonPost(
+            uri: "/api/contents",
+            content: [
+                'name' => 'Chat',
+            ],
+        );
+
+        // Assert
+        self::assertResponseStatusCodeSame(Response::HTTP_BAD_REQUEST);
+        ContentFactory::assert()->count(0);
+    }
+
+    public function testCannotCreateWithOtherThanPngOrJpgAsImage(): void
+    {
+        // Arrange & pre-assert
+        $user = UserFactory::createOne()->object();
+
+        ContentFactory::assert()->count(0);
+
+        $this->client->loginUser($user);
+
+        // Act
+        $this->jsonPost(
+            uri: "/api/contents",
+            content: [
+                'name' => 'Chat',
+            ],
+            files: [
+                'image' => new UploadedFile(
+                    __DIR__ . '/../../Stub/placeholder.txt',
+                    'placeholder.txt'
+                ),
+            ]
         );
 
         // Assert
@@ -132,6 +200,12 @@ class CreateContentTest extends AbstractTest
                 content: [
                     'name' => 'Chat',
                 ],
+                files: [
+                    'image' => new UploadedFile(
+                        __DIR__ . '/../../Stub/placeholder.jpg',
+                        'placeholder.jpg'
+                    ),
+                ]
             );
         } catch (AccessDeniedException $e) {
             ContentFactory::assert()->count(0);

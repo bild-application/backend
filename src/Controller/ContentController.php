@@ -84,7 +84,13 @@ class ContentController extends AbstractFOSRestController
     #[Rest\View(statusCode: Response::HTTP_CREATED, serializerGroups: ['content'])]
     public function create(Request $request): View
     {
-        return $this->view($this->contentManager->create($request->request->all()), Response::HTTP_CREATED);
+        return $this->view(
+            $this->contentManager->create([
+                ...$request->request->all(),
+                ...$request->files->all(),
+            ]),
+            Response::HTTP_CREATED
+        );
     }
 
     /**
