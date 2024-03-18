@@ -31,7 +31,7 @@ class PackageController extends AbstractFOSRestController
      */
     #[OA\Response(
         response: Response::HTTP_CREATED,
-        description: 'Create package',
+        description: 'Package created',
         content: new Model(type: Package::class, groups: ['package'])
     )]
     #[OA\RequestBody(content: new Model(type: PackageCreateType::class))]

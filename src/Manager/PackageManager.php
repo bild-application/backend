@@ -53,6 +53,10 @@ class PackageManager extends AbstractManager
             return $form;
         }
 
+        if ($package->getProfile() && $package->getProfile()->getUser() !== $this->user) {
+            throw new AccessDeniedException();
+        }
+
         $this->manager->persist($package);
         $this->manager->flush();
 
