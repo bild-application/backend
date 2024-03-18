@@ -4,6 +4,7 @@ namespace App\Manager;
 
 use App\Entity\Package;
 use App\Form\PackageCreateType;
+use App\Form\PackageFilterType;
 use App\Repository\PackageRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Form\FormFactoryInterface;
@@ -37,6 +38,27 @@ class PackageManager extends AbstractManager
         }
 
         return $package;
+    }
+
+    /**
+     * @return array<Package>
+     */
+    public function list(array $filters): FormInterface|array
+    {
+        if (!$this->user) {
+            throw new AccessDeniedException();
+        }
+
+        $form = $this->formFactory->create(PackageFilterType::class);
+        $form->submit($filters);
+
+        if (!$form->isValid()) {
+            return $form;
+        }
+
+        $profileId = $form->getData()['profile']?->getId();
+
+        return $this->packageRepository->list($this->user->getId(), $profileId);
     }
 
     /**

@@ -29,4 +29,25 @@ class PackageRepository extends ServiceEntityRepository
             ->getQuery()
             ->getOneOrNullResult();
     }
+
+    /**
+     * @return Package[]
+     */
+    public function list(string $userId, ?string $profileId): array
+    {
+        $builder = $this->createQueryBuilder('q')
+            ->join('q.profile', 'qp')
+            ->join('qp.user', 'u')
+            ->where('u.id = :userId')
+            ->setParameter('userId', $userId);
+
+        if ($profileId) {
+            $builder = $builder
+                ->andWhere('q.profile = :profileId')
+                ->setParameter('profileId', $profileId);
+        }
+
+        return $builder->getQuery()
+            ->getArrayResult();
+    }
 }

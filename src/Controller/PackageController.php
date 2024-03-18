@@ -44,6 +44,26 @@ class PackageController extends AbstractFOSRestController
         return $this->view($this->packageManager->get($id), Response::HTTP_OK);
     }
 
+    /**
+     * List packages owned by logged user
+     */
+    #[OA\Response(
+        response: Response::HTTP_OK,
+        description: 'Packages list',
+        content: new OA\MediaType(
+            mediaType: "application/json",
+            schema: new OA\Schema(
+                type: "array",
+                items: new OA\Items(ref: new Model(type: Package::class, groups: ["package"]))
+            )
+        )
+    )]
+    #[Rest\Get(path: '/', name: 'package_list')]
+    #[Rest\View(statusCode: Response::HTTP_OK)]
+    public function list(Request $request): View
+    {
+        return $this->view($this->packageManager->list($request->query->all()), Response::HTTP_OK);
+    }
 
     /**
      * Create a package owned by a profile of logged user
