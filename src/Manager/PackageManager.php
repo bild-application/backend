@@ -24,9 +24,9 @@ class PackageManager extends AbstractManager
         parent::__construct($tokenStorage);
     }
 
-    public function fetch(string $id): Package
+    public function get(string $id): Package
     {
-        $package = $this->packageRepository->fetch($id);
+        $package = $this->packageRepository->get($id);
 
         if (!$package) {
             throw new NotFoundHttpException();
@@ -68,7 +68,7 @@ class PackageManager extends AbstractManager
      */
     public function delete(string $id): array
     {
-        $package = $this->fetch($id);
+        $package = $this->get($id);
 
         $this->manager->remove($package);
         $this->manager->flush();

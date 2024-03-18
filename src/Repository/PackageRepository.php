@@ -21,7 +21,7 @@ class PackageRepository extends ServiceEntityRepository
         parent::__construct($registry, Package::class);
     }
 
-    public function fetch(string $id): ?Package
+    public function get(string $id): ?Package
     {
         return $this->createQueryBuilder('p')
             ->where('p.id = :id')

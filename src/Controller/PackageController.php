@@ -27,7 +27,26 @@ class PackageController extends AbstractFOSRestController
     }
 
     /**
-     * Create package. ROLE_USER
+     * Get a package owned by logged user
+     */
+    #[OA\Response(
+        response: Response::HTTP_OK,
+        description: 'Package',
+        content: new OA\MediaType(
+            mediaType: "application/json",
+            schema: new OA\Schema(ref: new Model(type: Package::class, groups: ["package"]))
+        )
+    )]
+    #[Rest\Get(path: '/{id}', name: 'package_get')]
+    #[Rest\View(statusCode: Response::HTTP_OK)]
+    public function get(string $id): View
+    {
+        return $this->view($this->packageManager->get($id), Response::HTTP_OK);
+    }
+
+
+    /**
+     * Create a package owned by a profile of logged user
      */
     #[OA\Response(
         response: Response::HTTP_CREATED,
@@ -43,11 +62,11 @@ class PackageController extends AbstractFOSRestController
     }
 
     /**
-     * Delete a package. ROLE_USER
+     * Delete a package owned by a profile of logged user
      */
     #[OA\Response(
         response: Response::HTTP_NO_CONTENT,
-        description: 'Delete a package',
+        description: 'Package deleted',
         content: []
     )]
     #[Rest\Delete(path: '/{id}', name: 'package_delete')]
