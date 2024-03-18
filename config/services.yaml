@@ -29,6 +29,11 @@ services:
                 version: 'latest'
                 region: '%env(resolve:MINIO_REGION)%'
                 endpoint: '%env(resolve:MINIO_ENDPOINT)%'
+                use_path_style_endpoint: true
                 credentials:
                     key: '%env(resolve:MINIO_ROOT_USER)%'
                     secret: '%env(resolve:MINIO_ROOT_PASSWORD)%'
+
+    App\Facade\FileSystemFacade:
+        autowire: true
+        public: true

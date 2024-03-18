@@ -6,6 +6,7 @@ use App\Factory\ContentFactory;
 use App\Factory\ProfileFactory;
 use App\Factory\UserFactory;
 use App\Tests\Base\AbstractTest;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Zenstruck\Foundry\Test\Factories;
@@ -29,11 +30,18 @@ class CreateContentTest extends AbstractTest
             content: [
                 'name' => 'Chat',
             ],
+            files: [
+                'image' => new UploadedFile(
+                    __DIR__ . '/../../Stub/placeholder.jpg',
+                    'placeholder.jpg'
+                ),
+            ]
         );
 
         // Assert
         self::assertResponseStatusCodeSame(Response::HTTP_CREATED);
         ContentFactory::assert()->count(1);
+        self::assertFsFileExists(ContentFactory::first()->getImageUrl());
     }
 
     public function testCanCreateWithTheirProfileAsOwner(): void
@@ -58,6 +66,7 @@ class CreateContentTest extends AbstractTest
         // Assert
         self::assertResponseStatusCodeSame(Response::HTTP_CREATED);
         ContentFactory::assert()->count(1);
+        self::assertFsFileExists(ContentFactory::first()->getImageUrl());
     }
 
     public function testCannotCreateWithOtherUserProfileAsOwner(): void

@@ -35,15 +35,17 @@ class DeleteContentTest extends AbstractTest
         self::assertResponseStatusCodeSame(Response::HTTP_NO_CONTENT);
         ContentFactory::assert()->count(0);
         UserFactory::assert()->count(1);
+        self::assertFsFileDoesNotExists($content->getImageUrl());
     }
 
-    public function testCannotDeleteWithoutId(): void
+    public function testCannotDeleteWithoutIdE(): void
     {
         // Arrange & pre-assert
         $content = ContentFactory::createOne(['user' => UserFactory::createOne()]);
         $user = $content->getUser();
 
         ContentFactory::assert()->count(1);
+        self::assertFsFileExists(ContentFactory::first()->getImageUrl());
         UserFactory::assert()->count(1);
 
         $this->client->loginUser($user);
@@ -59,6 +61,7 @@ class DeleteContentTest extends AbstractTest
         } catch (NotFoundHttpException $e) {
             // Assert
             ContentFactory::assert()->count(1);
+            self::assertFsFileExists(ContentFactory::first()->getImageUrl());
             UserFactory::assert()->count(1);
 
             throw $e;
@@ -115,6 +118,7 @@ class DeleteContentTest extends AbstractTest
         } catch (AccessDeniedException $e) {
             // Assert
             ContentFactory::assert()->count(1);
+            self::assertFsFileExists(ContentFactory::first()->getImageUrl());
 
             throw $e;
         }
@@ -138,6 +142,7 @@ class DeleteContentTest extends AbstractTest
         } catch (AccessDeniedException $e) {
             // Assert
             ContentFactory::assert()->count(1);
+            self::assertFsFileExists(ContentFactory::first()->getImageUrl());
 
             throw $e;
         }

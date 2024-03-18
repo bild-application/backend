@@ -36,6 +36,9 @@ services:
         target: 443
         published: ${HTTP3_PORT:-443}
         protocol: udp
+    networks:
+      - minio
+      - database
   
   # Mercure is installed as a Caddy module, prevent the Flex recipe from installing another service
   ###> symfony/mercure-bundle ###
@@ -53,6 +56,8 @@ services:
       - database_data:/var/lib/postgresql/data:rw
       # You may use a bind-mounted host directory instead, so that it is harder to accidentally remove the volume and lose all your data!
       # - ./docker/db/data:/var/lib/postgresql/data:rw
+    networks:
+      - database
   ###< doctrine/doctrine-bundle ###
 
   minio:
@@ -63,9 +68,8 @@ services:
     volumes:
       - minio_data:/data
     command: server /data --console-address ":9001"
-    ports:
-      - 9000:9000
-      - 9001:9001
+    networks:
+      - minio
 
 volumes:
   caddy_data:
@@ -79,3 +83,6 @@ volumes:
 
   minio_data:
 
+networks:
+  database:
+  minio:

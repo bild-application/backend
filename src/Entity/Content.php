@@ -29,6 +29,9 @@ class Content
     #[ORM\ManyToOne]
     private ?Profile $profile = null;
 
+    #[ORM\Column(length: 255)]
+    private ?string $imageUrl = null;
+
     public function getId(): ?string
     {
         return $this->id;
@@ -66,6 +69,18 @@ class Content
     public function setProfile(?Profile $profile): static
     {
         $this->profile = $profile;
+
+        return $this;
+    }
+
+    public function getImageUrl(): ?string
+    {
+        return $this->imageUrl;
+    }
+
+    public function setImageUrl(string $imageUrl): static
+    {
+        $this->imageUrl = $imageUrl;
 
         return $this;
     }
