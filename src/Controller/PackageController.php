@@ -47,6 +47,12 @@ class PackageController extends AbstractFOSRestController
     /**
      * List packages owned by logged user
      */
+    #[OA\QueryParameter(
+        parameter: "profile",
+        name: "profile",
+        description: "Id of a profile",
+        required: false
+    )]
     #[OA\Response(
         response: Response::HTTP_OK,
         description: 'Packages list',
