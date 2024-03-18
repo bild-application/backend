@@ -29,6 +29,26 @@ We defined some conventions to always work in the same way.
 
 ### Routing
 
+#### Nesting
+
+Avoid nesting resources because it is less flexible and more redondant ([read more here](https://stackoverflow.com/a/36410780))
+
+Good example :
+
+| Action | HTTP Verb | URL                   | Query        |
+|--------|-----------|-----------------------|--------------|
+| list   | GET       | /packs                | ?profile=... |
+| get    | GET       | /contents/{contentId} |              |
+
+Bad example :
+
+| Action | HTTP Verb | URL                                        |
+|--------|-----------|--------------------------------------------|
+| list   | GET       | /profiles/{profileId}/packs                |
+| get    | GET       | /profiles/{profileId}/contents/{contentId} |
+
+#### Parameters
+
 Routes should only contain {variables} referring to controller entity.
 Good example :
 
