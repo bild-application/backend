@@ -3,10 +3,12 @@
 namespace App\Factory;
 
 use App\Entity\Content;
+use App\Facade\FileSystemFacade;
 use App\Repository\ContentRepository;
 use Zenstruck\Foundry\ModelFactory;
 use Zenstruck\Foundry\Proxy;
 use Zenstruck\Foundry\RepositoryProxy;
+use function file_get_contents;
 
 /**
  * @extends ModelFactory<Content>
@@ -50,8 +52,9 @@ final class ContentFactory extends ModelFactory
      *
      * @todo inject services if required
      */
-    public function __construct()
-    {
+    public function __construct(
+        protected FileSystemFacade $fileSystemFacade
+    ) {
         parent::__construct();
     }
 
@@ -62,8 +65,12 @@ final class ContentFactory extends ModelFactory
      */
     protected function getDefaults(): array
     {
+        $imageFsUrl = 'stub/placeholder.png';
+        $this->fileSystemFacade->getStorage()->write($imageFsUrl, file_get_contents(__DIR__ . '/../../tests/Stub/placeholder.jpg'));
+
         return [
             'name' => self::faker()->sentence(),
+            'image' => $imageFsUrl,
         ];
     }
 

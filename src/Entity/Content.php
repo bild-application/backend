@@ -11,6 +11,7 @@ use Symfony\Bridge\Doctrine\IdGenerator\UuidGenerator;
 #[ORM\Entity(repositoryClass: ContentRepository::class)]
 class Content
 {
+    public const STORAGE_FOLDER = '/contents';
     #[ORM\Id]
     #[ORM\Column(type: Types::GUID)]
     #[ORM\GeneratedValue(strategy: 'CUSTOM')]
@@ -28,6 +29,9 @@ class Content
 
     #[ORM\ManyToOne]
     private ?Profile $profile = null;
+
+    #[ORM\Column(length: 255)]
+    private ?string $image = null;
 
     public function getId(): ?string
     {
@@ -66,6 +70,18 @@ class Content
     public function setProfile(?Profile $profile): static
     {
         $this->profile = $profile;
+
+        return $this;
+    }
+
+    public function getImage(): ?string
+    {
+        return $this->image;
+    }
+
+    public function setImage(string $image): static
+    {
+        $this->image = $image;
 
         return $this;
     }

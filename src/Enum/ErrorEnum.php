@@ -7,8 +7,11 @@ namespace App\Enum;
 enum ErrorEnum: string
 {
     case CODE_INVALID = 'code_invalid';
+    case CONSTRAINT_EXTENSION_IMAGE = 'constraint_extensions_image';
+
     case CONSTRAINT_LENGTH = 'constraint_length';
     case CONSTRAINT_LENGTH_EXACT = 'constraint_length_exact';
+    case CONSTRAINT_MAX_SIZE = 'constraint_max_size';
     case CONSTRAINT_NOT_NULL = 'constraint_not_null';
     case CONSTRAINT_NOT_BLANK = 'constraint_not_blank';
     case CONSTRAINT_INVALID_EMAIL = 'constraint_invalid_email';

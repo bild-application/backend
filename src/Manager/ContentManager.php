@@ -3,6 +3,7 @@
 namespace App\Manager;
 
 use App\Entity\Content;
+use App\Facade\FileSystemFacade;
 use App\Form\ContentEditType;
 use App\Repository\ContentRepository;
 use Doctrine\ORM\EntityManagerInterface;
@@ -11,6 +12,7 @@ use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
+use Symfony\Component\Uid\Uuid;
 
 class ContentManager extends AbstractManager
 {
@@ -20,6 +22,7 @@ class ContentManager extends AbstractManager
         protected FormFactoryInterface $formFactory,
         protected ContentRepository $contentRepository,
         protected ProfileManager $profileManager,
+        protected FileSystemFacade $fileSystemFacade,
     ) {
         parent::__construct($tokenStorage);
     }
@@ -69,6 +72,12 @@ class ContentManager extends AbstractManager
             throw new AccessDeniedException();
         }
 
+        $image = $form->get('image')->getData();
+        $imageName = Uuid::v4() . $image->guessExtension();
+        $imagePath = Content::STORAGE_FOLDER . "/" . $imageName;
+        $this->fileSystemFacade->getStorage()->write($imagePath, $image);
+
+        $content->setImage($imagePath);
         $content->setUser($this->user);
 
         $this->manager->persist($content);
@@ -83,6 +92,8 @@ class ContentManager extends AbstractManager
     public function delete(string $id): array
     {
         $content = $this->get($id);
+
+        $this->fileSystemFacade->getStorage()->delete($content->getImage());
 
         $this->manager->remove($content);
         $this->manager->flush();

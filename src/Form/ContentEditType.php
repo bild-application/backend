@@ -7,9 +7,11 @@ use App\Entity\Profile;
 use App\Enum\ErrorEnum;
 use Symfony\Bridge\Doctrine\Form\Type\EntityType;
 use Symfony\Component\Form\AbstractType;
+use Symfony\Component\Form\Extension\Core\Type\FileType;
 use Symfony\Component\Form\Extension\Core\Type\TextType;
 use Symfony\Component\Form\FormBuilderInterface;
 use Symfony\Component\OptionsResolver\OptionsResolver;
+use Symfony\Component\Validator\Constraints\File;
 use Symfony\Component\Validator\Constraints\NotNull;
 
 class ContentEditType extends AbstractType
@@ -24,6 +26,19 @@ class ContentEditType extends AbstractType
             ])
             ->add('profile', EntityType::class, [
                 'class' => Profile::class,
+            ])
+            ->add('image', FileType::class, [
+                'constraints' => [
+                    new NotNull(message: ErrorEnum::CONSTRAINT_NOT_NULL->value),
+                    new File(
+                        options: [
+                            "extensions" => ['jpg', 'png'],
+                            "extensionsMessage" => ErrorEnum::CONSTRAINT_EXTENSION_IMAGE->value,
+                            "maxSize" => "2M", // 2 megabyte
+                            "maxSizeMessage" => ErrorEnum::CONSTRAINT_MAX_SIZE->value,
+                        ]
+                    ),
+                ],
             ]);
     }
 
