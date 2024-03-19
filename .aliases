@@ -1,3 +1,5 @@
+# To use aliases, read the file aliases.md
+
 # SYMFONY ALIASES
 alias pc='de php bin/console'
 alias pu='de php bin/phpunit'
@@ -11,5 +13,5 @@ alias du='docker compose up -d --wait'
 alias db='docker compose up -d --build'
 alias dbc='docker compose build --no-cache'
 
-# OTHER
+# OTHER ALIASES
 alias c=clear
