@@ -1,40 +1,15 @@
-### To use aliases, run `source .aliases`
+# SYMFONY ALIASES
+alias pc='de php bin/console'
+alias pu='de php bin/phpunit'
+alias stan='de vendor/bin/phpstan analyse --level=6 --memory-limit=-1 src'
+alias ecs='de vendor/bin/ecs --fix'
 
+# DOCKER ALIASES
+alias dc='docker compose'
+alias de='docker exec -ti backend-php-1'
+alias du='docker compose up -d --wait'
+alias db='docker compose up -d --build'
+alias dbc='docker compose build --no-cache'
 
-## SYMFONY ALIASES ##
-
-    # Php Console: "pc"
-        alias pc='de php bin/console'
-
-    # Php Unit: "pu"
-        alias pu='de php bin/phpunit'
-
-    # Stan: "stan"
-        alias stan='de vendor/bin/phpstan analyse --level=6 --memory-limit=-1 src'
-
-    # Easy Coding Standard: "ecs"
-        alias ecs='de vendor/bin/ecs --fix'
-
-
-## DOCKER ALIASES ##
-
-    # Docker Compose: "dc"
-        alias dc='docker compose'
-
-    # Docker Exec: "de"
-        alias de='docker exec -ti backend-php-1'
-
-    # Docker Up: "du"
-        alias du='docker compose up -d --wait'
-
-    # Docker Build: "db"
-        alias db='docker compose up -d --build'
-
-    # Docker Build no Cache: "dbc"
-        alias dbc='docker compose build --no-cache'
-
-
-## OTHER ##
-
-    # Clear bash: "c"
-        alias c=clear
+# OTHER
+alias c=clear
