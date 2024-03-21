@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Tests\Controller\Profile;
+namespace App\Tests\Feature\Content;
 
 use App\Factory\ContentFactory;
 use App\Factory\ProfileFactory;

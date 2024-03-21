@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Tests\Controller\Auth;
+namespace App\Tests\Feature\Auth;
 
 use App\Tests\Base\AbstractTest;
 
