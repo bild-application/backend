@@ -8,7 +8,7 @@ alias ecs='de vendor/bin/ecs --fix'
 
 # DOCKER ALIASES
 alias dc='docker compose'
-alias de='docker exec -ti backend-php-1'
+alias de='docker compose exec php'
 alias du='docker compose up -d --wait'
 alias db='docker compose up -d --build'
 alias dbc='docker compose build --no-cache'
