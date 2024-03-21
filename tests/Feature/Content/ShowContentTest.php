@@ -14,7 +14,7 @@ class ShowContentTest extends AbstractTest
 {
     use Factories;
 
-    public function testCanSeeContentUserOwn(): void
+    public function test_can_see_content_user_own(): void
     {
         // Arrange & pre-assert
         $content = ContentFactory::createOne(['user' => UserFactory::createOne()]);
@@ -34,7 +34,7 @@ class ShowContentTest extends AbstractTest
         self::assertResponseStatusCodeSame(Response::HTTP_OK);
     }
 
-    public function testCannotSeeNonExistentId(): void
+    public function test_cannot_see_non_existent_id(): void
     {
         // Arrange & pre-assert
         $content = ContentFactory::createOne(['user' => UserFactory::createOne()]);
@@ -55,7 +55,7 @@ class ShowContentTest extends AbstractTest
         );
     }
 
-    public function testCannotSeeContentUserDontOwn(): void
+    public function test_cannot_see_content_user_dont_own(): void
     {
         // Arrange & pre-assert
         $content = ContentFactory::createOne(['user' => UserFactory::createOne()]);
@@ -74,7 +74,7 @@ class ShowContentTest extends AbstractTest
         );
     }
 
-    public function testCannotSeeContentWhenGuest(): void
+    public function test_cannot_see_content_when_guest(): void
     {
         // Arrange & pre-assert
         $content = ContentFactory::createOne(['user' => UserFactory::createOne()]);

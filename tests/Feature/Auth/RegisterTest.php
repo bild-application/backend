@@ -8,7 +8,7 @@ use Symfony\Component\HttpFoundation\Response;
 
 class RegisterTest extends AbstractTest
 {
-    public function testCanRegister(): void
+    public function test_can_register(): void
     {
         $this->jsonPost(
             uri: '/api/auth/register',
@@ -25,7 +25,7 @@ class RegisterTest extends AbstractTest
         self::assertResponseStatusCodeSame(Response::HTTP_CREATED);
     }
 
-    public function testReturnErrorIfInvalidEmail(): void
+    public function test_return_error_if_invalid_email(): void
     {
         $this->jsonPost(
             uri: '/api/auth/register',
@@ -42,7 +42,7 @@ class RegisterTest extends AbstractTest
         self::assertResponseStatusCodeSame(Response::HTTP_BAD_REQUEST);
     }
 
-    public function testReturnErrorIfAlreadyTakenEmail(): void
+    public function test_return_error_if_already_taken_email(): void
     {
         UserFactory::createOne([
             'email' => 'user@email.com',
@@ -63,7 +63,7 @@ class RegisterTest extends AbstractTest
         self::assertResponseStatusCodeSame(Response::HTTP_BAD_REQUEST);
     }
 
-    public function testReturnErrorIfNoPassword(): void
+    public function test_return_error_if_no_password(): void
     {
         $this->jsonPost(
             uri: '/api/auth/register',
@@ -76,7 +76,7 @@ class RegisterTest extends AbstractTest
         self::assertResponseStatusCodeSame(Response::HTTP_BAD_REQUEST);
     }
 
-    public function testReturnErrorIfNotSamePassword(): void
+    public function test_return_error_if_not_same_password(): void
     {
         $this->jsonPost(
             uri: '/api/auth/register',
@@ -93,7 +93,7 @@ class RegisterTest extends AbstractTest
         self::assertResponseStatusCodeSame(Response::HTTP_BAD_REQUEST);
     }
 
-    public function testReturnErrorIfTooShortPassword(): void
+    public function test_return_error_if_too_short_password(): void
     {
         $this->jsonPost(
             uri: '/api/auth/register',
@@ -110,7 +110,7 @@ class RegisterTest extends AbstractTest
         self::assertResponseStatusCodeSame(Response::HTTP_BAD_REQUEST);
     }
 
-    public function testReturnErrorIfTermsAreNotAccepted(): void
+    public function test_return_error_if_terms_are_not_accepted(): void
     {
         $this->jsonPost(
             uri: '/api/auth/register',

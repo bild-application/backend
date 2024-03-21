@@ -15,7 +15,7 @@ class CreateProfileContentTest extends AbstractTest
 {
     use Factories;
 
-    public function testCanCreateContentInProfileUserOwn(): void
+    public function test_can_create_content_in_profile_user_own(): void
     {
         // Arrange & pre-assert
         $user = UserFactory::createOne();
@@ -45,7 +45,7 @@ class CreateProfileContentTest extends AbstractTest
         self::assertFsFileExists(ContentFactory::first()->getImage());
     }
 
-    public function testCannotCreateWithOtherUserProfileAsOwner(): void
+    public function test_cannot_create_with_other_user_profile_as_owner(): void
     {
         // Arrange & pre-assert
         $profile = ProfileFactory::createOne(['user' => UserFactory::createOne()]);
@@ -78,7 +78,7 @@ class CreateProfileContentTest extends AbstractTest
         }
     }
 
-    public function testCannotCreateWithoutName(): void
+    public function test_cannot_create_without_name(): void
     {
         // Arrange & pre-assert
         $user = UserFactory::createOne();
@@ -104,7 +104,7 @@ class CreateProfileContentTest extends AbstractTest
         ContentFactory::assert()->count(0);
     }
 
-    public function testCannotCreateWithoutImage(): void
+    public function test_cannot_create_without_image(): void
     {
         // Arrange & pre-assert
         $user = UserFactory::createOne();
@@ -127,7 +127,7 @@ class CreateProfileContentTest extends AbstractTest
         ContentFactory::assert()->count(0);
     }
 
-    public function testCannotCreateWithOtherThanPngOrJpgAsImage(): void
+    public function test_cannot_create_with_other_than_png_or_jpg_as_image(): void
     {
         // Arrange & pre-assert
         $user = UserFactory::createOne();
@@ -156,7 +156,7 @@ class CreateProfileContentTest extends AbstractTest
         ContentFactory::assert()->count(0);
     }
 
-    public function testCannotCreateWhenGuest(): void
+    public function test_cannot_create_when_guest(): void
     {
         // Arrange & pre-assert
         $profile = ProfileFactory::createOne(['user' => UserFactory::createOne()]);

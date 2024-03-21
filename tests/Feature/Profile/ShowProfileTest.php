@@ -14,7 +14,7 @@ class ShowProfileTest extends AbstractTest
 {
     use Factories;
 
-    public function testCanSeeProfileUserOwn(): void
+    public function test_can_see_profile_user_own(): void
     {
         // Arrange & pre-assert
         $profile = ProfileFactory::createOne(['user' => UserFactory::createOne()]);
@@ -34,7 +34,7 @@ class ShowProfileTest extends AbstractTest
         self::assertResponseStatusCodeSame(Response::HTTP_OK);
     }
 
-    public function testCannotSeeNonExistentId(): void
+    public function test_cannot_see_non_existent_id(): void
     {
         // Arrange & pre-assert
         $profile = ProfileFactory::createOne(['user' => UserFactory::createOne()]);
@@ -55,7 +55,7 @@ class ShowProfileTest extends AbstractTest
         );
     }
 
-    public function testCannotSeeProfileUserDontOwn(): void
+    public function test_cannot_see_profile_user_dont_own(): void
     {
         // Arrange & pre-assert
         $profile = ProfileFactory::createOne(['user' => UserFactory::createOne()]);
@@ -73,7 +73,7 @@ class ShowProfileTest extends AbstractTest
         );
     }
 
-    public function testCannotSeeProfileWhenGuest(): void
+    public function test_cannot_see_profile_when_guest(): void
     {
         // Arrange & pre-assert
         $profile = ProfileFactory::createOne(['user' => UserFactory::createOne()]);

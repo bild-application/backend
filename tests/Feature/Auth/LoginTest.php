@@ -6,7 +6,7 @@ use App\Tests\Base\AbstractTest;
 
 class LoginTest extends AbstractTest
 {
-    public function testCanLogin(): void
+    public function test_can_login(): void
     {
         $this->markTestSkipped('TODO');
         $this->jsonPost(

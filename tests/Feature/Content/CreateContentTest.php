@@ -15,7 +15,7 @@ class CreateContentTest extends AbstractTest
 {
     use Factories;
 
-    public function testCanCreateWithItselfAsOwner(): void
+    public function test_can_create_with_itself_as_owner(): void
     {
         // Arrange & pre-assert
         $user = UserFactory::createOne()->object();
@@ -44,7 +44,7 @@ class CreateContentTest extends AbstractTest
         self::assertFsFileExists(ContentFactory::first()->getImage());
     }
 
-    public function testCanCreateWithTheirProfileAsOwner(): void
+    public function test_can_create_with_their_profile_as_owner(): void
     {
         // Arrange & pre-assert
         $userProxy = UserFactory::createOne();
@@ -75,7 +75,7 @@ class CreateContentTest extends AbstractTest
         self::assertFsFileExists(ContentFactory::first()->getImage());
     }
 
-    public function testCannotCreateWithOtherUserProfileAsOwner(): void
+    public function test_cannot_create_with_other_user_profile_as_owner(): void
     {
         // Arrange & pre-assert
         $profileProxy = ProfileFactory::createOne(['user' => UserFactory::createOne()]);
@@ -110,7 +110,7 @@ class CreateContentTest extends AbstractTest
         }
     }
 
-    public function testCannotCreateWithoutName(): void
+    public function test_cannot_create_without_name(): void
     {
         // Arrange & pre-assert
         $user = UserFactory::createOne()->object();
@@ -136,7 +136,7 @@ class CreateContentTest extends AbstractTest
         ContentFactory::assert()->count(0);
     }
 
-    public function testCannotCreateWithoutImage(): void
+    public function test_cannot_create_without_image(): void
     {
         // Arrange & pre-assert
         $user = UserFactory::createOne()->object();
@@ -158,7 +158,7 @@ class CreateContentTest extends AbstractTest
         ContentFactory::assert()->count(0);
     }
 
-    public function testCannotCreateWithOtherThanPngOrJpgAsImage(): void
+    public function test_cannot_create_with_other_than_png_or_jpg_as_image(): void
     {
         // Arrange & pre-assert
         $user = UserFactory::createOne()->object();
@@ -186,7 +186,7 @@ class CreateContentTest extends AbstractTest
         ContentFactory::assert()->count(0);
     }
 
-    public function testCannotCreateWhenGuest(): void
+    public function test_cannot_create_when_guest(): void
     {
         // Arrange & pre-assert
         ContentFactory::assert()->count(0);

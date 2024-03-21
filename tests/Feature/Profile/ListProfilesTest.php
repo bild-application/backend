@@ -13,7 +13,7 @@ class ListProfilesTest extends AbstractTest
 {
     use Factories;
 
-    public function testCanListProfileUserOwn(): void
+    public function test_can_list_profile_user_own(): void
     {
         // Arrange & pre-assert
         $userProxy = UserFactory::createOne();
@@ -36,7 +36,7 @@ class ListProfilesTest extends AbstractTest
         self::assertNotEmpty($json);
     }
 
-    public function testCannotListProfilesUserDontOwn(): void
+    public function test_cannot_list_profiles_user_dont_own(): void
     {
         // Arrange & pre-assert
         $user = UserFactory::createOne()->object();
@@ -57,7 +57,7 @@ class ListProfilesTest extends AbstractTest
         self::assertEmpty($json);
     }
 
-    public function testCannotListWhenGuest(): void
+    public function test_cannot_list_when_guest(): void
     {
         // Arrange & pre-assert
         ProfileFactory::createMany(2, ['user' => UserFactory::createOne()]);

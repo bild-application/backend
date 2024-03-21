@@ -14,7 +14,7 @@ class DeleteProfileTest extends AbstractTest
 {
     use Factories;
 
-    public function testCanDeleteProfileUserOwn(): void
+    public function test_can_delete_profile_user_own(): void
     {
         // Arrange & pre-assert
         $profile = ProfileFactory::createOne(['user' => UserFactory::createOne()]);
@@ -36,7 +36,7 @@ class DeleteProfileTest extends AbstractTest
         UserFactory::assert()->count(1);
     }
 
-    public function testCannotDeleteWithoutId(): void
+    public function test_cannot_delete_without_id(): void
     {
         // Arrange & pre-assert
         $profile = ProfileFactory::createOne(['user' => UserFactory::createOne()]);
@@ -63,7 +63,7 @@ class DeleteProfileTest extends AbstractTest
         }
     }
 
-    public function testCannotDeleteNonExistentId(): void
+    public function test_cannot_delete_non_existent_id(): void
     {
         // Arrange & pre-assert
         $profile = ProfileFactory::createOne(['user' => UserFactory::createOne()]);
@@ -92,7 +92,7 @@ class DeleteProfileTest extends AbstractTest
         }
     }
 
-    public function testCannotDeleteProfileUserDontOwn(): void
+    public function test_cannot_delete_profile_user_dont_own(): void
     {
         // Arrange & pre-assert
         $profile = ProfileFactory::createOne(['user' => UserFactory::createOne()]);
@@ -117,7 +117,7 @@ class DeleteProfileTest extends AbstractTest
         }
     }
 
-    public function testCannotDeleteWhenGuest(): void
+    public function test_cannot_delete_when_guest(): void
     {
         // Arrange & pre-assert
         $profile = ProfileFactory::createOne(['user' => UserFactory::createOne()]);

@@ -14,7 +14,7 @@ class DeleteContentTest extends AbstractTest
 {
     use Factories;
 
-    public function testCanDeleteContentUserOwn(): void
+    public function test_can_delete_content_user_own(): void
     {
         // Arrange & pre-assert
         $content = ContentFactory::createOne(['user' => UserFactory::createOne()]);
@@ -39,7 +39,7 @@ class DeleteContentTest extends AbstractTest
         self::assertFsFileDoesNotExists($imageUrl);
     }
 
-    public function testCannotDeleteWithoutId(): void
+    public function test_cannot_delete_without_id(): void
     {
         // Arrange & pre-assert
         $content = ContentFactory::createOne(['user' => UserFactory::createOne()]);
@@ -70,7 +70,7 @@ class DeleteContentTest extends AbstractTest
         }
     }
 
-    public function testCannotDeleteNonExistentId(): void
+    public function test_cannot_delete_non_existent_id(): void
     {
         // Arrange & pre-assert
         $content = ContentFactory::createOne(['user' => UserFactory::createOne()]);
@@ -99,7 +99,7 @@ class DeleteContentTest extends AbstractTest
         }
     }
 
-    public function testCannotDeleteContentUserDontOwn(): void
+    public function test_cannot_delete_content_user_dont_own(): void
     {
         // Arrange & pre-assert
         $content = ContentFactory::createOne(['user' => UserFactory::createOne()]);
@@ -127,7 +127,7 @@ class DeleteContentTest extends AbstractTest
         }
     }
 
-    public function testCannotDeleteWhenGuest(): void
+    public function test_cannot_delete_when_guest(): void
     {
         // Arrange & pre-assert
         $content = ContentFactory::createOne(['user' => UserFactory::createOne()]);

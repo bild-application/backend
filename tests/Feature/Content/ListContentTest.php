@@ -13,7 +13,7 @@ class ListContentTest extends AbstractTest
 {
     use Factories;
 
-    public function testCanListContentUserOwn(): void
+    public function test_can_list_content_user_own(): void
     {
         // Arrange & pre-assert
         $user = UserFactory::createOne()->object();
@@ -35,7 +35,7 @@ class ListContentTest extends AbstractTest
         self::assertCount(4, $json);
     }
 
-    public function testCannotListContentUserDontOwn(): void
+    public function test_cannot_list_content_user_dont_own(): void
     {
         // Arrange & pre-assert
         ContentFactory::createMany(4, ['user' => UserFactory::createOne()]);
@@ -57,7 +57,7 @@ class ListContentTest extends AbstractTest
         self::assertCount(0, $json);
     }
 
-    public function testCannotListWhenGuest(): void
+    public function test_cannot_list_when_guest(): void
     {
         $this->expectException(AccessDeniedException::class);
 

@@ -13,7 +13,7 @@ class CreateProfileTest extends AbstractTest
 {
     use Factories;
 
-    public function testCanCreate(): void
+    public function test_can_create(): void
     {
         // Arrange & pre-assert
         $user = UserFactory::createOne()->object();
@@ -36,7 +36,7 @@ class CreateProfileTest extends AbstractTest
         ProfileFactory::assert()->count(1);
     }
 
-    public function testCannotCreateWithoutName(): void
+    public function test_cannot_create_without_name(): void
     {
         // Arrange & pre-assert
         $user = UserFactory::createOne()->object();
@@ -57,7 +57,7 @@ class CreateProfileTest extends AbstractTest
         ProfileFactory::assert()->count(0);
     }
 
-    public function testCannotCreateWhenGuest(): void
+    public function test_cannot_create_when_guest(): void
     {
         // Arrange & pre-assert
         ProfileFactory::assert()->count(0);
