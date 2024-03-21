@@ -15,14 +15,14 @@ class CreateContentTest extends AbstractTest
 {
     use Factories;
 
-    public function test_can_create_with_itself_as_owner(): void
+    public function test_can_create_content_for_user(): void
     {
         // Arrange & pre-assert
-        $user = UserFactory::createOne()->object();
+        $user = UserFactory::createOne();
 
         ContentFactory::assert()->count(0);
 
-        $this->client->loginUser($user);
+        $this->client->loginUser($user->object());
 
         // Act
         $this->jsonPost(
@@ -44,22 +44,21 @@ class CreateContentTest extends AbstractTest
         self::assertFsFileExists(ContentFactory::first()->getImage());
     }
 
-    public function test_can_create_with_their_profile_as_owner(): void
+    public function test_can_create_content_in_user_profile(): void
     {
         // Arrange & pre-assert
-        $userProxy = UserFactory::createOne();
-        $profileProxy = ProfileFactory::createOne(['user' => $userProxy]);
+        $user = UserFactory::createOne();
+        $profile = ProfileFactory::createOne(['user' => $user]);
 
         ContentFactory::assert()->count(0);
 
-        $this->client->loginUser($userProxy->object());
+        $this->client->loginUser($user->object());
 
         // Act
         $this->jsonPost(
-            uri: "/api/contents",
+            uri: "/api/profiles/{$profile->getId()}/contents",
             content: [
                 'name' => 'Chat',
-                'profile' => $profileProxy->getId(),
             ],
             files: [
                 'image' => new UploadedFile(
@@ -75,26 +74,25 @@ class CreateContentTest extends AbstractTest
         self::assertFsFileExists(ContentFactory::first()->getImage());
     }
 
-    public function test_cannot_create_with_other_user_profile_as_owner(): void
+    public function test_cannot_create_content_in_other_user_profile(): void
     {
         // Arrange & pre-assert
-        $profileProxy = ProfileFactory::createOne(['user' => UserFactory::createOne()]);
-        $otherUserProfileProxy = ProfileFactory::createOne(['user' => UserFactory::createOne()]);
-        $user = $profileProxy->getUser();
+        $user = UserFactory::createOne();
+        $profile = ProfileFactory::createOne(['user' => $user]);
+        $notTheOwner = UserFactory::createOne();
 
         ContentFactory::assert()->count(0);
 
-        $this->client->loginUser($user);
+        $this->client->loginUser($notTheOwner->object());
 
         $this->expectException(AccessDeniedException::class);
 
         // Act
         try {
             $this->jsonPost(
-                uri: "/api/contents",
+                uri: "/api/profiles/{$profile->getId()}/contents",
                 content: [
                     'name' => 'Chat',
-                    'profile' => $otherUserProfileProxy->getId(),
                 ],
                 files: [
                     'image' => new UploadedFile(
@@ -110,14 +108,14 @@ class CreateContentTest extends AbstractTest
         }
     }
 
-    public function test_cannot_create_without_name(): void
+    public function test_cannot_create_content_without_name(): void
     {
         // Arrange & pre-assert
-        $user = UserFactory::createOne()->object();
+        $user = UserFactory::createOne();
 
         ContentFactory::assert()->count(0);
 
-        $this->client->loginUser($user);
+        $this->client->loginUser($user->object());
 
         // Act
         $this->jsonPost(
@@ -136,14 +134,14 @@ class CreateContentTest extends AbstractTest
         ContentFactory::assert()->count(0);
     }
 
-    public function test_cannot_create_without_image(): void
+    public function test_cannot_create_content_without_image(): void
     {
         // Arrange & pre-assert
-        $user = UserFactory::createOne()->object();
+        $user = UserFactory::createOne();
 
         ContentFactory::assert()->count(0);
 
-        $this->client->loginUser($user);
+        $this->client->loginUser($user->object());
 
         // Act
         $this->jsonPost(
@@ -158,14 +156,14 @@ class CreateContentTest extends AbstractTest
         ContentFactory::assert()->count(0);
     }
 
-    public function test_cannot_create_with_other_than_png_or_jpg_as_image(): void
+    public function test_cannot_create_content_with_image_other_than_png_or_jpg(): void
     {
         // Arrange & pre-assert
-        $user = UserFactory::createOne()->object();
+        $user = UserFactory::createOne();
 
         ContentFactory::assert()->count(0);
 
-        $this->client->loginUser($user);
+        $this->client->loginUser($user->object());
 
         // Act
         $this->jsonPost(
@@ -186,7 +184,7 @@ class CreateContentTest extends AbstractTest
         ContentFactory::assert()->count(0);
     }
 
-    public function test_cannot_create_when_guest(): void
+    public function test_cannot_create_content_when_guest(): void
     {
         // Arrange & pre-assert
         ContentFactory::assert()->count(0);

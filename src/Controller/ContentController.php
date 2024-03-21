@@ -19,7 +19,7 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 #[OA\Tag(name: 'Content')]
 #[IsGranted(RoleEnum::ROLE_USER->value)]
-#[Route(path: '/api/contents')]
+#[Route(path: '/api')]
 class ContentController extends AbstractFOSRestController
 {
     public function __construct(
@@ -38,7 +38,7 @@ class ContentController extends AbstractFOSRestController
             schema: new OA\Schema(ref: new Model(type: Content::class, groups: ["content"]))
         )
     )]
-    #[Rest\Get(path: '/{contentId}', name: 'content_get')]
+    #[Rest\Get(path: '/contents/{contentId}', name: 'contents_get')]
     #[Rest\View(statusCode: Response::HTTP_OK, serializerGroups: ['content'])]
     public function get(string $contentId): View
     {
@@ -59,7 +59,7 @@ class ContentController extends AbstractFOSRestController
             )
         )
     )]
-    #[Rest\Get(path: '', name: 'content_list')]
+    #[Rest\Get(path: '/contents', name: 'contents_list')]
     #[Rest\View(statusCode: Response::HTTP_OK, serializerGroups: ['content'])]
     public function list(): View
     {
@@ -80,15 +80,16 @@ class ContentController extends AbstractFOSRestController
         description: 'Validation errors',
         content: new Model(type: ContentEditType::class)
     )]
-    #[Rest\Post(path: '', name: 'content_create')]
+    #[Rest\Post(path: '/contents', name: 'contents_create')]
+    #[Rest\Post(path: '/profiles/{profileId}/contents', name: 'profiles_contents_create')]
     #[Rest\View(statusCode: Response::HTTP_CREATED, serializerGroups: ['content'])]
-    public function create(Request $request): View
+    public function create(Request $request, ?string $profileId): View
     {
         return $this->view(
             $this->contentManager->create([
                 ...$request->request->all(),
                 ...$request->files->all(),
-            ]),
+            ], $profileId),
             Response::HTTP_CREATED
         );
     }
@@ -101,7 +102,7 @@ class ContentController extends AbstractFOSRestController
         description: 'Content deleted',
         content: []
     )]
-    #[Rest\Delete(path: '/{id}', name: 'content_delete')]
+    #[Rest\Delete(path: '/contents/{id}', name: 'contents_delete')]
     #[Rest\View(statusCode: Response::HTTP_NO_CONTENT)]
     public function delete(string $id): View
     {
