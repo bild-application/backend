@@ -31,21 +31,18 @@ We defined some conventions to always work in the same way.
 
 #### Nesting
 
-Avoid nesting resources because it is less flexible and more redondant ([read more here](https://stackoverflow.com/a/36410780))
+Avoid nesting resources when it's possible :
+
+- if a resource can be identified by its own id, do it
+- if a resource is necessarily linked to another, you can nest
 
 Good example :
 
-| Action | HTTP Verb | URL                   | Query        |
-|--------|-----------|-----------------------|--------------|
-| list   | GET       | /packs                | ?profile=... |
-| get    | GET       | /contents/{contentId} |              |
-
-Bad example :
-
-| Action | HTTP Verb | URL                                        |
-|--------|-----------|--------------------------------------------|
-| list   | GET       | /profiles/{profileId}/packs                |
-| get    | GET       | /profiles/{profileId}/contents/{contentId} |
+| Action | HTTP Verb | URL                                        | Description                     |
+|--------|-----------|--------------------------------------------|---------------------------------|
+| get    | GET       | /profiles/{profileId}/contents/{contentId} | Create a content in a profile   |
+| delete | DELETE    | /contents                                  | Delete a content                |
+| delete | DELETE    | /profiles/{profileId}/contents/{contentId} | Remove a content from a profile |
 
 #### Parameters
 
