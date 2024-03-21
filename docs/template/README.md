@@ -17,7 +17,8 @@ with [FrankenPHP](https://frankenphp.dev) and [Caddy](https://caddyserver.com/) 
 
 * Production, development and CI ready
 * Just 1 service by default
-* Blazing-fast performance thanks to [the worker mode of FrankenPHP](https://github.com/dunglas/frankenphp/blob/main/./worker.md) (automatically enabled in prod mode)
+* Blazing-fast performance thanks to [the worker mode of FrankenPHP](https://github.com/dunglas/frankenphp/blob/main/./worker.md) (automatically
+  enabled in prod mode)
 * [Installation of extra Docker Compose services](./extra-services.md) with Symfony Flex
 * Automatic HTTPS (in dev and prod)
 * HTTP/3 and [Early Hints](https://symfony.com/blog/new-in-symfony-6-3-early-hints) support
@@ -35,7 +36,7 @@ with [FrankenPHP](https://frankenphp.dev) and [Caddy](https://caddyserver.com/) 
 3. [Support for extra services](./extra-services.md)
 4. [Deploying in production](./production.md)
 5. [Debugging with Xdebug](./xdebug.md)
-6. [TLS Certificates](./tls.md)
+6. [TLS Certificates](../tls.md)
 7. [Using a Makefile](./makefile.md)
 8. [Using MySQL instead of PostgreSQL](./mysql.md)
 9. [Troubleshooting](./troubleshooting.md)
@@ -47,4 +48,5 @@ Symfony Docker is available under the MIT License.
 
 ## Credits
 
-Created by [Kévin Dunglas](https://dunglas.dev), co-maintained by [Maxime Helias](https://twitter.com/maxhelias) and sponsored by [Les-Tilleuls.coop](https://les-tilleuls.coop).
+Created by [Kévin Dunglas](https://dunglas.dev), co-maintained by [Maxime Helias](https://twitter.com/maxhelias) and sponsored
+by [Les-Tilleuls.coop](https://les-tilleuls.coop).

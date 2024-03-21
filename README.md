@@ -13,6 +13,13 @@
 - Login with credentials written in .env (variables MINIO_ROOT_USER & MINIO_ROOT_PASSWORD)
 - Create a bucket with same name as written in .env (variable MINIO_BUCKET)
 
+## Other docs
+
+- [Aliases](docs/aliases.md)
+- [Database](docs/db.md)
+- [Tests](docs/testing.md)
+- [Https certificate](docs/tls.md)
+
 ## Conventions
 
 We defined some conventions to always work in the same way.

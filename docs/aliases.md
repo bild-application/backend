@@ -1,17 +1,21 @@
 # <p align="center"><u>Aliases</u></p>
+
 ### To use aliases, run : `$ source .aliases`
 
 <br>
 
 ### Symfony aliases
+
 - #### Php Console : `$ pc`
 - #### Php Unit : `$ pu`
+- #### Php Unit with Filters : `$ puf <test name regex>`
 - #### Php Stan : `$ stan`
 - #### Easy Coding Standard : `$ ecs`
 
 <br>
 
 ### Docker aliases
+
 - #### Docker Compose : `$ dc`
 - #### Docker Exec : `$ de`
 - #### Docker Up : `$ du`
@@ -21,4 +25,5 @@
 <br>
 
 ### other aliases
+
 - #### Clear bash : `$ c`

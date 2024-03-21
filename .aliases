@@ -2,7 +2,8 @@
 
 # SYMFONY ALIASES
 alias pc='de php bin/console'
-alias pu='de php bin/phpunit'
+alias pu='de php bin/phpunit --testdox'
+alias puf='de php bin/phpunit --testdox --filter'
 alias stan='de vendor/bin/phpstan analyse --level=6 --memory-limit=-1 src'
 alias ecs='de vendor/bin/ecs --fix'
 
