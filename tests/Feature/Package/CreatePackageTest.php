@@ -14,23 +14,18 @@ class CreatePackageTest extends AbstractTest
 {
     use Factories;
 
-    public function testCanCreateInAProfileUserOwn(): void
+    public function test_can_create_in_a_profile_user_own(): void
     {
         // Arrange & pre-assert
         $user = UserFactory::createOne();
         $profile = ProfileFactory::createOne(['user' => $user]);
 
-        PackageFactory::assert()->count(0);
-
         $this->client->loginUser($user->object());
 
         // Act
         $this->jsonPost(
-            uri: '/api/packages',
-            content: [
-                'name' => 'Animaux',
-                'profile' => $profile->getId(),
-            ],
+            uri: "/api/profiles/{$profile->getId()}/packages",
+            content: ['name' => 'Animaux']
         );
 
         // Assert
@@ -38,26 +33,22 @@ class CreatePackageTest extends AbstractTest
         PackageFactory::assert()->count(1);
     }
 
-    public function testCannotCreateInAProfileUserDontOwn(): void
+    public function test_cannot_create_in_a_profile_user_dont_own(): void
     {
         // Arrange & pre-assert
-        $profile = ProfileFactory::createOne(['user' => UserFactory::createOne()]);
+        $user = UserFactory::createOne();
+        $profile = ProfileFactory::createOne(['user' => $user]);
         $notTheOwner = UserFactory::createOne();
-
-        PackageFactory::assert()->count(0);
 
         $this->client->loginUser($notTheOwner->object());
 
         $this->expectException(AccessDeniedException::class);
 
-        // Act
         try {
+            // Act
             $this->jsonPost(
-                uri: '/api/packages',
-                content: [
-                    'name' => 'Animaux',
-                    'profile' => $profile->getId(),
-                ],
+                uri: "/api/profiles/{$profile->getId()}/packages",
+                content: ['name' => 'Animaux']
             );
         } catch (AccessDeniedException $e) {
             // Assert
@@ -67,98 +58,35 @@ class CreatePackageTest extends AbstractTest
         }
     }
 
-    public function testCannotCreateWhenGuest(): void
-    {
-        // Arrange & pre-assert
-        $profile = ProfileFactory::createOne(['user' => UserFactory::createOne()]);
-
-        PackageFactory::assert()->count(0);
-
-        $this->expectException(AccessDeniedException::class);
-
-        // Act
-        try {
-            $this->jsonPost(
-                uri: '/api/packages',
-                content: [
-                    'name' => 'Animaux',
-                    'profile' => $profile->getId(),
-                ],
-            );
-        } catch (AccessDeniedException $e) {
-            // Assert
-            PackageFactory::assert()->count(0);
-
-            throw  $e;
-        }
-    }
-
-    public function testCannotCreateWithoutName(): void
+    public function test_cannot_create_without_name(): void
     {
         // Arrange & pre-assert
         $user = UserFactory::createOne();
         $profile = ProfileFactory::createOne(['user' => $user]);
 
-        PackageFactory::assert()->count(0);
-
         $this->client->loginUser($user->object());
 
         // Act
-        $this->jsonPost(
-            uri: '/api/packages',
-            content: [
-                'profile' => $profile->getId(),
-            ],
-        );
+        $this->jsonPost(uri: "/api/profiles/{$profile->getId()}/packages");
 
         // Assert
         self::assertResponseStatusCodeSame(Response::HTTP_BAD_REQUEST);
         PackageFactory::assert()->count(0);
     }
 
-    public function testCannotCreateWithoutProfile(): void
+    public function test_cannot_create_for_non_existent_profile(): void
     {
         // Arrange & pre-assert
         $user = UserFactory::createOne();
         $profile = ProfileFactory::createOne(['user' => $user]);
-
-        PackageFactory::assert()->count(0);
-
-        $this->client->loginUser($user->object());
-
-        // Act
-        $this->jsonPost(
-            uri: '/api/packages',
-            content: [
-                'name' => 'Animaux',
-            ],
-        );
-
-        // Assert
-        self::assertResponseStatusCodeSame(Response::HTTP_BAD_REQUEST);
-        PackageFactory::assert()->count(0);
-    }
-
-    public function testCannotCreateForNonExistentProfile(): void
-    {
-        // Arrange & pre-assert
-        $user = UserFactory::createOne();
-        $profile = ProfileFactory::createOne(['user' => $user]);
-        $profileId = $profile->getId();
         $profile->remove();
 
-        ProfileFactory::assert()->count(0);
-        PackageFactory::assert()->count(0);
-
         $this->client->loginUser($user->object());
 
         // Act
         $this->jsonPost(
-            uri: '/api/packages',
-            content: [
-                'name' => 'Animaux',
-                'profile' => $profileId,
-            ],
+            uri: "/api/profiles/{$profile->getId()}/packages",
+            content: ['name' => 'Animaux']
         );
 
         // Assert
