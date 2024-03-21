@@ -9,7 +9,7 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Zenstruck\Foundry\Test\Factories;
 
-class ListProfileTest extends AbstractTest
+class ListProfilesTest extends AbstractTest
 {
     use Factories;
 
