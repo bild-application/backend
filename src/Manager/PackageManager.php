@@ -41,7 +41,9 @@ class PackageManager extends AbstractManager
     }
 
     /**
-     * @return array<Package>
+     * @param array<mixed> $filters
+     *
+     * @return FormInterface|array<Package>
      */
     public function list(array $filters): FormInterface|array
     {
