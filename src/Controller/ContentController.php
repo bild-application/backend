@@ -5,7 +5,6 @@ namespace App\Controller;
 use App\Entity\Content;
 use App\Enum\RoleEnum;
 use App\Form\ContentEditType;
-use App\Form\ProfileEditType;
 use App\Manager\ContentManager;
 use FOS\RestBundle\Controller\AbstractFOSRestController;
 use FOS\RestBundle\Controller\Annotations as Rest;
@@ -69,7 +68,7 @@ class ContentController extends AbstractFOSRestController
     /**
      * Create a content owned by logged user
      */
-    #[OA\RequestBody(content: new Model(type: ProfileEditType::class))]
+    #[OA\RequestBody(content: new Model(type: ContentEditType::class))]
     #[OA\Response(
         response: Response::HTTP_CREATED,
         description: 'Content created',

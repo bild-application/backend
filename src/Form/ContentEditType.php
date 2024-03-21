@@ -34,6 +34,10 @@ class ContentEditType extends AbstractType
                         ]
                     ),
                 ],
+                'documentation' => [
+                    'type' => 'string',
+                    'description' => 'Content image: PNG/JPG',
+                ],
             ]);
     }
 
