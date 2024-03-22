@@ -28,3 +28,4 @@ phpstan.neon
 .DS_Store
 
 node_modules/
+.phpunit-result/

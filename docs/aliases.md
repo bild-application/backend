@@ -7,10 +7,13 @@
 ### Symfony aliases
 
 - #### Php Console : `$ pc`
+-
+    - #### Php Stan : `$ stan`
+- #### Easy Coding Standard : `$ ecs`
 - #### Php Unit : `$ pu`
 - #### Php Unit with Filters : `$ puf <test name regex>`
-- #### Php Stan : `$ stan`
-- #### Easy Coding Standard : `$ ecs`
+- #### Php Unit CodeCoverage TEXT: `$ puc-text`
+- #### Php Unit CodeCoverage HTML: `$ puc-html`
 
 <br>
 
