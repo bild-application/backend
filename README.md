@@ -1,5 +1,7 @@
 # BILD
 
+[![CI](https://github.com/bild-application/backend/actions/workflows/ci.yml/badge.svg)](https://github.com/bild-application/backend/actions/workflows/ci.yml)
+
 ## Set up the Bild back-end
 
 - `docker compose build --no-cache` to build fresh images
