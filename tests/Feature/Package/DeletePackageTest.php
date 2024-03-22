@@ -10,11 +10,11 @@ use Symfony\Component\HttpFoundation\Response;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Zenstruck\Foundry\Test\Factories;
 
-class UpdatePackageTest extends AbstractTest
+class DeletePackageTest extends AbstractTest
 {
     use Factories;
 
-    public function test_can_update_package(): void
+    public function test_can_delete_package(): void
     {
         // Arrange & pre-assert
         $user = UserFactory::createOne();
@@ -24,20 +24,14 @@ class UpdatePackageTest extends AbstractTest
         $this->client->loginUser($user->object());
 
         // Act
-        $this->jsonPatch(
-            uri: "/api/packages/{$package->getid()}",
-            content: ['name' => 'new name']
-        );
+        $this->jsonDelete("/api/packages/{$package->getId()}");
 
         // Assert
-        self::assertResponseStatusCodeSame(Response::HTTP_OK);
-        PackageFactory::assert()->count(1);
-
-        $package->refresh();
-        self::assertEquals('new name', $package->getName());
+        self::assertResponseStatusCodeSame(Response::HTTP_NO_CONTENT);
+        PackageFactory::assert()->count(0);
     }
 
-    public function test_cannot_update_package_user_dont_own(): void
+    public function test_cannot_delete_package_user_dont_own(): void
     {
         // Arrange & pre-assert
         $user = UserFactory::createOne();
@@ -50,10 +44,14 @@ class UpdatePackageTest extends AbstractTest
         // Assert
         $this->expectException(AccessDeniedException::class);
 
-        // Act
-        $this->jsonPatch(
-            uri: "/api/packages/{$package->getid()}",
-            content: ['name' => 'new name']
-        );
+        try {
+            // Act
+            $this->jsonDelete("/api/packages/{$package->getId()}");
+        } catch (AccessDeniedException $e) {
+            // Assert
+            PackageFactory::assert()->count(1);
+
+            throw  $e;
+        }
     }
 }
