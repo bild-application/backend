@@ -41,4 +41,18 @@ class ContentRepository extends ServiceEntityRepository
             ->getQuery()
             ->getArrayResult();
     }
+
+    /**
+     * @return Content[]
+     */
+    public function listForProfile(string $userId, string $profileId): array
+    {
+        return $this->createQueryBuilder('c')
+            ->where('c.user = :user_id')
+            ->andWhere('c.profile is NULL OR c.profile = :prodile_id')
+            ->setParameter('user_id', $userId)
+            ->setParameter('prodile_id', $profileId)
+            ->getQuery()
+            ->getArrayResult();
+    }
 }

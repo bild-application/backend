@@ -13,6 +13,8 @@ use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Symfony\Component\Uid\Uuid;
+use Symfony\Component\Validator\ConstraintViolationListInterface;
+use Symfony\Component\Validator\Validator\ValidatorInterface;
 
 class ContentManager extends AbstractManager
 {
@@ -23,20 +25,23 @@ class ContentManager extends AbstractManager
         protected ContentRepository $contentRepository,
         protected ProfileManager $profileManager,
         protected FileSystemFacade $fileSystemFacade,
+        protected ValidatorInterface $validator
     ) {
         parent::__construct($tokenStorage);
     }
 
     /**
-     * @return array<Content>
+     * @return ConstraintViolationListInterface|array<Content>
      */
-    public function list(): array
+    public function list(string $profileId): ConstraintViolationListInterface|array
     {
         if (!$this->user) {
             throw new AccessDeniedException();
         }
 
-        return $this->contentRepository->list($this->user->getId());
+        $this->profileManager->get($profileId);
+
+        return $this->contentRepository->listForProfile($this->user->getId(), $profileId);
     }
 
     public function get(string $id): Content

@@ -45,7 +45,7 @@ class ContentController extends AbstractFOSRestController
     }
 
     /**
-     * List contents owned by logged user
+     * List profile contents (all contents directly linked to the profile + profileless contents linked to the owner of the profile)
      */
     #[OA\Response(
         response: Response::HTTP_OK,
@@ -58,11 +58,11 @@ class ContentController extends AbstractFOSRestController
             )
         )
     )]
-    #[Rest\Get(path: '/contents', name: 'contents_list')]
+    #[Rest\Get(path: '/profiles/{profileId}/contents', name: 'profiles_contents_list')]
     #[Rest\View(statusCode: Response::HTTP_OK, serializerGroups: ['content'])]
-    public function list(): View
+    public function list(string $profileId): View
     {
-        return $this->view($this->contentManager->list(), Response::HTTP_OK);
+        return $this->view($this->contentManager->list($profileId), Response::HTTP_OK);
     }
 
     /**
