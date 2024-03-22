@@ -69,6 +69,26 @@ class ProfileManager extends AbstractManager
     }
 
     /**
+     * @param mixed[] $data
+     */
+    public function update(string $profileId, array $data): FormInterface|Profile
+    {
+        $profile = $this->get($profileId);
+
+        $form = $this->formFactory->create(ProfileEditType::class, $profile);
+        $form->submit($data);
+
+        if (!$form->isValid()) {
+            return $form;
+        }
+
+        $this->manager->persist($profile);
+        $this->manager->flush();
+
+        return $profile;
+    }
+
+    /**
      * @return null[]
      */
     public function delete(string $id): array
