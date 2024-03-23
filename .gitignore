@@ -29,3 +29,7 @@ phpstan.neon
 
 node_modules/
 .phpunit-result/
+
+###> lexik/jwt-authentication-bundle ###
+/config/jwt/*.pem
+###< lexik/jwt-authentication-bundle ###

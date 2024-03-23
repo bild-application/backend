@@ -19,6 +19,7 @@
         "league/flysystem-aws-s3-v3": "^3.25",
         "league/flysystem-bundle": "^3.3",
         "league/flysystem-memory": "^3.25",
+        "lexik/jwt-authentication-bundle": "^2.20",
         "nelmio/api-doc-bundle": "^4.24",
         "runtime/frankenphp-symfony": "^0.2.0",
         "sensio/framework-extra-bundle": "*",

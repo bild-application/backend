@@ -1,6 +1,6 @@
 <?php
 
-namespace App\Manager\Auth;
+namespace App\Manager;
 
 use App\Entity\User;
 use App\Form\RegisterFormType;
@@ -10,7 +10,7 @@ use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
 
-class SessionManager
+class RegistrationManager
 {
     public function __construct(
         private readonly FormFactoryInterface $formFactory,
@@ -23,7 +23,7 @@ class SessionManager
     /**
      * @param mixed[] $data
      */
-    public function attemptLogin(array $data): FormInterface
+    public function create(array $data): FormInterface|User
     {
         $user = new User();
 
@@ -31,21 +31,21 @@ class SessionManager
             ->create(RegisterFormType::class, $user)
             ->submit($data);
 
-        if ($form->isSubmitted() && $form->isValid()) {
-            // encode the plain password
-            $user->setPassword(
-                $this->userPasswordHasher->hashPassword(
-                    $user,
-                    $form->get('password')->getData()
-                )
-            );
-
-            $this->entityManager->persist($user);
-            $this->entityManager->flush();
-
-            $this->security->login($user, 'json_login', 'main');
+        if (!$form->isValid()) {
+            return $form;
         }
 
-        return $form;
+        // encode the plain password
+        $user->setPassword(
+            $this->userPasswordHasher->hashPassword(
+                $user,
+                $data['password']['first']
+            )
+        );
+
+        $this->entityManager->persist($user);
+        $this->entityManager->flush();
+
+        return $user;
     }
 }
