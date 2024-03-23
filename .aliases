@@ -4,7 +4,7 @@
 alias pc='de php bin/console'
 alias stan='de vendor/bin/phpstan analyse --level=6 --memory-limit=-1 src'
 alias ecs='de vendor/bin/ecs --fix'
-
+alias fixtures='pc doctrine:fixtures:load'
 ## TEST ALIASES
 alias pu='de php bin/phpunit --testdox'
 alias puf='de php bin/phpunit --testdox --filter'
