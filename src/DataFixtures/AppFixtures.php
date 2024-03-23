@@ -32,6 +32,7 @@ class AppFixtures extends Fixture
         ]);
 
         $bobProfile = ProfileFactory::createOne([
+            'name' => 'Bob',
             'user' => $aliceAndBobParents,
         ]);
 
