@@ -4,7 +4,7 @@ flysystem:
         default.storage:
             adapter: local
             options:
-                directory: '%kernel.project_dir%/var/storage/local'
+                directory: '%kernel.project_dir%/public/uploads'
         s3.storage:
             adapter: 'aws'
             options:

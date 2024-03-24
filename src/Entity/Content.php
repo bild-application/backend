@@ -6,6 +6,8 @@ use App\Repository\ContentRepository;
 use Doctrine\DBAL\Types\Types;
 use Doctrine\ORM\Mapping as ORM;
 use JMS\Serializer\Annotation\Groups;
+use JMS\Serializer\Annotation\SerializedName;
+use JMS\Serializer\Annotation\VirtualProperty;
 use Symfony\Bridge\Doctrine\IdGenerator\UuidGenerator;
 
 #[ORM\Entity(repositoryClass: ContentRepository::class)]
@@ -84,5 +86,13 @@ class Content
         $this->image = $image;
 
         return $this;
+    }
+
+    #[Groups(['content'])]
+    #[VirtualProperty]
+    #[SerializedName('imageUrl')]
+    public function getImagePublicPath(): string
+    {
+        return '/uploads' . $this->getImage();
     }
 }
