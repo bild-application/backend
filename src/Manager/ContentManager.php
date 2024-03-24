@@ -12,7 +12,6 @@ use Symfony\Component\Form\FormInterface;
 use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Security\Core\Authentication\Token\Storage\TokenStorageInterface;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
-use Symfony\Component\Uid\Uuid;
 use Symfony\Component\Validator\ConstraintViolationListInterface;
 use Symfony\Component\Validator\Validator\ValidatorInterface;
 
@@ -78,9 +77,8 @@ class ContentManager extends AbstractManager
         }
 
         $image = $form->get('image')->getData();
-        $imageName = Uuid::v4() . $image->guessExtension();
-        $imagePath = Content::STORAGE_FOLDER . "/" . $imageName;
-        $this->fileSystemFacade->getStorage()->write($imagePath, $image);
+
+        $imagePath = $this->fileSystemFacade->store($image, Content::STORAGE_FOLDER);
 
         $content->setImage($imagePath);
         $content->setUser($this->user);

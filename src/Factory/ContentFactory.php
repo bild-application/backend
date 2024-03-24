@@ -5,10 +5,10 @@ namespace App\Factory;
 use App\Entity\Content;
 use App\Facade\FileSystemFacade;
 use App\Repository\ContentRepository;
+use Symfony\Component\HttpFoundation\File\UploadedFile;
 use Zenstruck\Foundry\ModelFactory;
 use Zenstruck\Foundry\Proxy;
 use Zenstruck\Foundry\RepositoryProxy;
-use function file_get_contents;
 
 /**
  * @extends ModelFactory<Content>
@@ -65,12 +65,16 @@ final class ContentFactory extends ModelFactory
      */
     protected function getDefaults(): array
     {
-        $imageFsUrl = 'stub/placeholder.png';
-        $this->fileSystemFacade->getStorage()->write($imageFsUrl, file_get_contents(__DIR__ . '/../../tests/Stub/placeholder.jpg'));
+        $file = new UploadedFile(
+            __DIR__ . '/../../tests/Stub/placeholder.jpg',
+            'placeholder.jpg'
+        );
+
+        $filePath = $this->fileSystemFacade->store($file, Content::STORAGE_FOLDER);
 
         return [
             'name' => self::faker()->sentence(),
-            'image' => $imageFsUrl,
+            'image' => $filePath,
         ];
     }
 
