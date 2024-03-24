@@ -48,6 +48,6 @@ class PackageRepository extends ServiceEntityRepository
         }
 
         return $builder->getQuery()
-            ->getArrayResult();
+            ->getResult();
     }
 }

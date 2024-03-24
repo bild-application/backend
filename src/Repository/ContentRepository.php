@@ -39,7 +39,7 @@ class ContentRepository extends ServiceEntityRepository
             ->where('c.user = :user_id')
             ->setParameter('user_id', $userId)
             ->getQuery()
-            ->getArrayResult();
+            ->getResult();
     }
 
     /**
@@ -53,6 +53,6 @@ class ContentRepository extends ServiceEntityRepository
             ->setParameter('user_id', $userId)
             ->setParameter('prodile_id', $profileId)
             ->getQuery()
-            ->getArrayResult();
+            ->getResult();
     }
 }
