@@ -3,8 +3,7 @@
 namespace App\Manager;
 
 use App\Entity\Package;
-use App\Form\PackageCreateType;
-use App\Form\PackageFilterType;
+use App\Form\PackageEditType;
 use App\Repository\PackageRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Form\FormFactoryInterface;
@@ -41,45 +40,34 @@ class PackageManager extends AbstractManager
     }
 
     /**
-     * @param array<mixed> $filters
+     * @param string $profileId
      *
-     * @return FormInterface|array<Package>
+     * @return array<Package>
      */
-    public function list(array $filters): FormInterface|array
+    public function list(string $profileId): array
     {
-        if (!$this->user) {
-            throw new AccessDeniedException();
-        }
+        $profile = $this->profileManager->get($profileId);
 
-        $form = $this->formFactory->create(PackageFilterType::class);
-        $form->submit($filters);
-
-        if (!$form->isValid()) {
-            return $form;
-        }
-
-        $profileId = $form->getData()['profile']?->getId();
-
-        return $this->packageRepository->list($this->user->getId(), $profileId);
+        return $this->packageRepository->list($profile);
     }
 
     /**
      * @param mixed[] $data
      */
-    public function create(array $data): FormInterface|Package
+    public function create(array $data, string $profileId): FormInterface|Package
     {
+        $profile = $this->profileManager->get($profileId);
+
         $package = new Package();
 
-        $form = $this->formFactory->create(PackageCreateType::class, $package);
+        $form = $this->formFactory->create(PackageEditType::class, $package);
         $form->submit($data);
 
         if (!$form->isValid()) {
             return $form;
         }
 
-        if ($package->getProfile() && $package->getProfile()->getUser() !== $this->user) {
-            throw new AccessDeniedException();
-        }
+        $package->setProfile($profile);
 
         $this->manager->persist($package);
         $this->manager->flush();
@@ -88,11 +76,30 @@ class PackageManager extends AbstractManager
     }
 
     /**
+     * @param mixed[] $data
+     */
+    public function update(array $data, string $packageId): FormInterface|Package
+    {
+        $package = $this->get($packageId);
+
+        $form = $this->formFactory->create(PackageEditType::class, $package);
+        $form->submit($data, false);
+
+        if (!$form->isValid()) {
+            return $form;
+        }
+
+        $this->manager->flush();
+
+        return $package;
+    }
+
+    /**
      * @return null[]
      */
-    public function delete(string $id): array
+    public function delete(string $packageId): array
     {
-        $package = $this->get($id);
+        $package = $this->get($packageId);
 
         $this->manager->remove($package);
         $this->manager->flush();

@@ -14,68 +14,18 @@ class ListPackageTest extends AbstractTest
 {
     use Factories;
 
-    public function testCanListPackagesUserOwn(): void
-    {
-        // Arrange & pre-assert
-        $user = UserFactory::createOne();
-        PackageFactory::createMany(4, ['profile' => ProfileFactory::createOne(['user' => $user])]);
-
-        $this->client->loginUser($user->object());
-
-        // Act
-        $this->jsonGet(
-            uri: "/api/packages/",
-        );
-
-        // Assert
-        self::assertResponseStatusCodeSame(Response::HTTP_OK);
-        $json = $this->jsonResponseContent();
-        self::assertCount(4, $json);
-    }
-
-    public function testCannotListPackagesUserDontOwn(): void
-    {
-        // Arrange & pre-assert
-        PackageFactory::createMany(4, ['profile' => ProfileFactory::createOne(['user' => UserFactory::createOne()])]);
-        $notTheOwner = UserFactory::createOne();
-
-        $this->client->loginUser($notTheOwner->object());
-
-        // Act
-        $this->jsonGet(
-            uri: "/api/packages/",
-        );
-
-        // Assert
-        self::assertResponseStatusCodeSame(Response::HTTP_OK);
-        $json = $this->jsonResponseContent();
-        self::assertCount(0, $json);
-    }
-
-    public function testCannotListWhenGuest(): void
-    {
-        $this->expectException(AccessDeniedException::class);
-
-        // Act
-        $this->jsonGet(
-            uri: "/api/packages/",
-        );
-    }
-
-    public function testCanListOnlyPackagesOfProfileUserOwn(): void
+    public function test_can_list_packages_user_own(): void
     {
         // Arrange & pre-assert
         $user = UserFactory::createOne();
         $profile = ProfileFactory::createOne(['user' => $user]);
+
         PackageFactory::createMany(4, ['profile' => $profile]);
-        PackageFactory::createMany(1, ['profile' => ProfileFactory::createOne(['user' => $user])]);
 
         $this->client->loginUser($user->object());
 
         // Act
-        $this->jsonGet(
-            uri: "/api/packages/?profile={$profile->getId()}",
-        );
+        $this->jsonGet(uri: "/api/profiles/{$profile->getId()}/packages");
 
         // Assert
         self::assertResponseStatusCodeSame(Response::HTTP_OK);
@@ -83,20 +33,56 @@ class ListPackageTest extends AbstractTest
         self::assertCount(4, $json);
     }
 
-    public function testCannotListPackagesOfProfileUserDontOwn(): void
+    public function test_cannot_list_packages_user_dont_own(): void
     {
         // Arrange & pre-assert
-        $profile = ProfileFactory::createOne(['user' => UserFactory::createOne()]);
-        PackageFactory::createMany(4, ['profile' => $profile]);
+        $user = UserFactory::createOne();
+        $profile = ProfileFactory::createOne(['user' => $user]);
         $notTheOwner = UserFactory::createOne();
+
+        PackageFactory::createMany(4, ['profile' => $profile]);
 
         $this->client->loginUser($notTheOwner->object());
 
+        // Assert
+        $this->expectException(AccessDeniedException::class);
+
         // Act
-        $this->jsonGet(
-            uri: "/api/packages/?profile={$profile->getId()}",
-        );
+        $this->jsonGet(uri: "/api/profiles/{$profile->getId()}/packages");
+    }
+
+    public function test_cannot_list_when_guest(): void
+    {
+        // Arrange & pre-assert
+        $user = UserFactory::createOne();
+        $profile = ProfileFactory::createOne(['user' => $user]);
+
+        // Assert
+        $this->expectException(AccessDeniedException::class);
+
+        // Act
+        $this->jsonGet(uri: "/api/profiles/{$profile->getId()}/packages");
+    }
+
+    public function test_can_list_only_packages_of_profile_user_own(): void
+    {
+        // Arrange & pre-assert
+        $user = UserFactory::createOne();
+        $profile = ProfileFactory::createOne(['user' => $user]);
+
+        PackageFactory::createMany(4, ['profile' => $profile]);
+        PackageFactory::createMany(2, [
+            'profile' => ProfileFactory::createOne(['user' => $user]),
+        ]);
+
+        $this->client->loginUser($user->object());
+
+        // Act
+        $this->jsonGet(uri: "/api/profiles/{$profile->getId()}/packages");
+
+        // Assert
         $json = $this->jsonResponseContent();
-        self::assertCount(0, $json);
+        self::assertResponseStatusCodeSame(Response::HTTP_OK);
+        self::assertCount(4, $json);
     }
 }

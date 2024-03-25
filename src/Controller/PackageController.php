@@ -4,7 +4,7 @@ namespace App\Controller;
 
 use App\Entity\Package;
 use App\Enum\RoleEnum;
-use App\Form\PackageCreateType;
+use App\Form\PackageEditType;
 use App\Manager\PackageManager;
 use FOS\RestBundle\Controller\AbstractFOSRestController;
 use FOS\RestBundle\Controller\Annotations as Rest;
@@ -18,7 +18,7 @@ use Symfony\Component\Security\Http\Attribute\IsGranted;
 
 #[OA\Tag(name: 'Package')]
 #[IsGranted(RoleEnum::ROLE_USER->value)]
-#[Route(path: '/api/packages')]
+#[Route(path: '/api')]
 class PackageController extends AbstractFOSRestController
 {
     public function __construct(
@@ -27,35 +27,11 @@ class PackageController extends AbstractFOSRestController
     }
 
     /**
-     * Get a package owned by logged user
+     * Get the list of profile packages
      */
     #[OA\Response(
         response: Response::HTTP_OK,
-        description: 'Package',
-        content: new OA\MediaType(
-            mediaType: "application/json",
-            schema: new OA\Schema(ref: new Model(type: Package::class, groups: ["package"]))
-        )
-    )]
-    #[Rest\Get(path: '/{id}', name: 'package_get')]
-    #[Rest\View(statusCode: Response::HTTP_OK)]
-    public function get(string $id): View
-    {
-        return $this->view($this->packageManager->get($id), Response::HTTP_OK);
-    }
-
-    /**
-     * List packages owned by logged user
-     */
-    #[OA\QueryParameter(
-        parameter: "profile",
-        name: "profile",
-        description: "Id of a profile",
-        required: false
-    )]
-    #[OA\Response(
-        response: Response::HTTP_OK,
-        description: 'Packages list',
+        description: 'Package list',
         content: new OA\MediaType(
             mediaType: "application/json",
             schema: new OA\Schema(
@@ -64,41 +40,57 @@ class PackageController extends AbstractFOSRestController
             )
         )
     )]
-    #[Rest\Get(path: '/', name: 'package_list')]
+    #[Rest\Get(path: '/profiles/{profileId}/packages', name: 'profiles_packages_list')]
     #[Rest\View(statusCode: Response::HTTP_OK)]
-    public function list(Request $request): View
+    public function list(string $profileId): View
     {
-        return $this->view($this->packageManager->list($request->query->all()), Response::HTTP_OK);
+        return $this->view($this->packageManager->list($profileId), Response::HTTP_OK);
     }
 
     /**
-     * Create a package owned by a profile of logged user
+     * Creates a package for a profile
      */
     #[OA\Response(
         response: Response::HTTP_CREATED,
         description: 'Package created',
         content: new Model(type: Package::class, groups: ['package'])
     )]
-    #[OA\RequestBody(content: new Model(type: PackageCreateType::class))]
-    #[Rest\Post(path: '', name: 'package_create')]
+    #[OA\RequestBody(content: new Model(type: PackageEditType::class))]
+    #[Rest\Post(path: '/profiles/{profileId}/packages', name: 'profiles_packages_create')]
     #[Rest\View(statusCode: Response::HTTP_CREATED, serializerGroups: ['package'])]
-    public function create(Request $request): View
+    public function create(Request $request, string $profileId): View
     {
-        return $this->view($this->packageManager->create($request->request->all()), Response::HTTP_CREATED);
+        return $this->view($this->packageManager->create($request->request->all(), $profileId), Response::HTTP_CREATED);
     }
 
     /**
-     * Delete a package owned by a profile of logged user
+     * Updates a package
+     */
+    #[OA\Response(
+        response: Response::HTTP_OK,
+        description: 'Updated package',
+        content: new Model(type: Package::class, groups: ['package'])
+    )]
+    #[OA\RequestBody(content: new Model(type: PackageEditType::class))]
+    #[Rest\Patch(path: '/packages/{packageId}', name: 'profiles_packages_update')]
+    #[Rest\View(statusCode: Response::HTTP_OK, serializerGroups: ['package'])]
+    public function update(Request $request, string $packageId): View
+    {
+        return $this->view($this->packageManager->update($request->request->all(), $packageId), Response::HTTP_OK);
+    }
+
+    /**
+     * Deletes a package
      */
     #[OA\Response(
         response: Response::HTTP_NO_CONTENT,
-        description: 'Package deleted',
+        description: 'No content',
         content: []
     )]
-    #[Rest\Delete(path: '/{id}', name: 'package_delete')]
+    #[Rest\Delete(path: '/packages/{packageId}', name: 'package_delete')]
     #[Rest\View(statusCode: Response::HTTP_NO_CONTENT)]
-    public function delete(string $id): View
+    public function delete(string $packageId): View
     {
-        return $this->view($this->packageManager->delete($id), Response::HTTP_NO_CONTENT);
+        return $this->view($this->packageManager->delete($packageId), Response::HTTP_NO_CONTENT);
     }
 }

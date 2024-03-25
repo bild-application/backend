@@ -3,6 +3,7 @@
 namespace App\Repository;
 
 use App\Entity\Package;
+use App\Entity\Profile;
 use Doctrine\Bundle\DoctrineBundle\Repository\ServiceEntityRepository;
 use Doctrine\Persistence\ManagerRegistry;
 
@@ -33,21 +34,12 @@ class PackageRepository extends ServiceEntityRepository
     /**
      * @return Package[]
      */
-    public function list(string $userId, ?string $profileId): array
+    public function list(Profile $profile): array
     {
-        $builder = $this->createQueryBuilder('q')
-            ->join('q.profile', 'qp')
-            ->join('qp.user', 'u')
-            ->where('u.id = :userId')
-            ->setParameter('userId', $userId);
-
-        if ($profileId) {
-            $builder = $builder
-                ->andWhere('q.profile = :profileId')
-                ->setParameter('profileId', $profileId);
-        }
-
-        return $builder->getQuery()
+        return $this->createQueryBuilder('p')
+            ->where('p.profile = :profile')
+            ->setParameter('profile', $profile)
+            ->getQuery()
             ->getResult();
     }
 }
