@@ -25,7 +25,7 @@ class ListPackageTest extends AbstractTest
         $this->client->loginUser($user->object());
 
         // Act
-        $this->jsonGet(uri: "/api/profile/{$profile->getId()}/packages");
+        $this->jsonGet(uri: "/api/profiles/{$profile->getId()}/packages");
 
         // Assert
         self::assertResponseStatusCodeSame(Response::HTTP_OK);
@@ -44,13 +44,11 @@ class ListPackageTest extends AbstractTest
 
         $this->client->loginUser($notTheOwner->object());
 
-        // Act
-        $this->jsonGet(uri: "/api/profile/{$profile->getId()}/packages");
-
         // Assert
-        self::assertResponseStatusCodeSame(Response::HTTP_UNAUTHORIZED);
-        $json = $this->jsonResponseContent();
-        self::assertCount(0, $json);
+        $this->expectException(AccessDeniedException::class);
+
+        // Act
+        $this->jsonGet(uri: "/api/profiles/{$profile->getId()}/packages");
     }
 
     public function test_cannot_list_when_guest(): void
@@ -63,7 +61,7 @@ class ListPackageTest extends AbstractTest
         $this->expectException(AccessDeniedException::class);
 
         // Act
-        $this->jsonGet(uri: "/api/profile/{$profile->getId()}/packages");
+        $this->jsonGet(uri: "/api/profiles/{$profile->getId()}/packages");
     }
 
     public function test_can_list_only_packages_of_profile_user_own(): void
@@ -74,13 +72,13 @@ class ListPackageTest extends AbstractTest
 
         PackageFactory::createMany(4, ['profile' => $profile]);
         PackageFactory::createMany(2, [
-            'profile' => ProfileFactory::createOne(['user' => $user])
+            'profile' => ProfileFactory::createOne(['user' => $user]),
         ]);
 
         $this->client->loginUser($user->object());
 
         // Act
-        $this->jsonGet(uri: "/api/profile/{$profile->getId()}/packages");
+        $this->jsonGet(uri: "/api/profiles/{$profile->getId()}/packages");
 
         // Assert
         $json = $this->jsonResponseContent();

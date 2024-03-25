@@ -4,7 +4,6 @@ namespace App\Manager;
 
 use App\Entity\Package;
 use App\Form\PackageEditType;
-use App\Form\PackageFilterType;
 use App\Repository\PackageRepository;
 use Doctrine\ORM\EntityManagerInterface;
 use Symfony\Component\Form\FormFactoryInterface;
@@ -41,9 +40,9 @@ class PackageManager extends AbstractManager
     }
 
     /**
-     * @param array<mixed> $filters
+     * @param string $profileId
      *
-     * @return FormInterface|array<Package>
+     * @return array<Package>
      */
     public function list(string $profileId): array
     {

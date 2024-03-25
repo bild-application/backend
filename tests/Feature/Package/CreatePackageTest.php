@@ -7,6 +7,7 @@ use App\Factory\ProfileFactory;
 use App\Factory\UserFactory;
 use App\Tests\Base\AbstractTest;
 use Symfony\Component\HttpFoundation\Response;
+use Symfony\Component\HttpKernel\Exception\NotFoundHttpException;
 use Symfony\Component\Security\Core\Exception\AccessDeniedException;
 use Zenstruck\Foundry\Test\Factories;
 
@@ -79,18 +80,25 @@ class CreatePackageTest extends AbstractTest
         // Arrange & pre-assert
         $user = UserFactory::createOne();
         $profile = ProfileFactory::createOne(['user' => $user]);
+        $profileId = $profile->getId();
         $profile->remove();
 
         $this->client->loginUser($user->object());
 
-        // Act
-        $this->jsonPost(
-            uri: "/api/profiles/{$profile->getId()}/packages",
-            content: ['name' => 'Animaux']
-        );
-
         // Assert
-        self::assertResponseStatusCodeSame(Response::HTTP_BAD_REQUEST);
-        PackageFactory::assert()->count(0);
+        $this->expectException(NotFoundHttpException::class);
+
+        try {
+            // Act
+            $this->jsonPost(
+                uri: "/api/profiles/{$profileId}/packages",
+                content: ['name' => 'Animaux']
+            );
+        } catch (NotFoundHttpException $e) {
+            // Assert
+            PackageFactory::assert()->count(0);
+
+            throw  $e;
+        }
     }
 }
