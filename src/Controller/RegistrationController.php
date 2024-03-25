@@ -4,7 +4,6 @@ namespace App\Controller;
 
 use App\Entity\User;
 use App\Form\RegisterFormType;
-use App\Manager\Auth\SessionManager;
 use App\Manager\RegistrationManager;
 use FOS\RestBundle\Controller\AbstractFOSRestController;
 use FOS\RestBundle\Controller\Annotations as Rest;
@@ -24,6 +23,9 @@ class RegistrationController extends AbstractFOSRestController
     ) {
     }
 
+    /**
+     * Create an account
+     */
     #[OA\RequestBody(content: new Model(type: RegisterFormType::class))]
     #[OA\Response(
         response: Response::HTTP_CREATED,

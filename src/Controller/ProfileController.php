@@ -47,7 +47,13 @@ class ProfileController extends AbstractFOSRestController
     #[OA\Response(
         response: Response::HTTP_OK,
         description: 'Profiles list',
-        content: new Model(type: Profile::class, groups: ['profile'])
+        content: new OA\MediaType(
+            mediaType: "application/json",
+            schema: new OA\Schema(
+                type: "array",
+                items: new OA\Items(ref: new Model(type: Profile::class, groups: ['profile']))
+            )
+        )
     )]
     #[Rest\Get(path: '/profiles', name: 'profiles_list')]
     #[Rest\View(statusCode: Response::HTTP_OK, serializerGroups: ['profile'])]
