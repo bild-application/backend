@@ -5,7 +5,6 @@ namespace App\Manager;
 use App\Entity\User;
 use App\Form\RegisterFormType;
 use Doctrine\ORM\EntityManagerInterface;
-use Symfony\Bundle\SecurityBundle\Security;
 use Symfony\Component\Form\FormFactoryInterface;
 use Symfony\Component\Form\FormInterface;
 use Symfony\Component\PasswordHasher\Hasher\UserPasswordHasherInterface;
@@ -16,7 +15,6 @@ class RegistrationManager
         private readonly FormFactoryInterface $formFactory,
         private readonly UserPasswordHasherInterface $userPasswordHasher,
         private readonly EntityManagerInterface $entityManager,
-        private readonly Security $security,
     ) {
     }
 
