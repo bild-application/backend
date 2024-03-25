@@ -26,7 +26,6 @@ class Package
 
     /** @var Collection<string, Content> */
     #[ORM\ManyToMany(targetEntity: Content::class)]
-    #[Groups(['package'])]
     private Collection $contents;
 
     #[ORM\ManyToOne]
